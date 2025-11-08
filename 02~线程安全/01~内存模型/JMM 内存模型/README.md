@@ -4,7 +4,7 @@
 
 Java 内存模型（JMM）是一个规范，它定义了 Java 程序中各个变量（线程共享变量）的访问规则，以及在 JVM 中将变量存储到内存和从内存中读取变量这样的底层细节。
 
-![Java 内存模型](https://assets.ng-tech.icu/item/20230417213538.png)
+![Java 内存模型](https://ngte-superbed.oss-cn-beijing.aliyuncs.com/item/20230417213538.png)
 
 ## 为什么需要内存模型
 
