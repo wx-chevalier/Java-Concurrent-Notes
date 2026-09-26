@@ -24,7 +24,7 @@
         }.start();
     }
 }
-```java
+```
 其中，map 初始化为一个长度为 2 的数组，loadFactor=0.75，`threshold=2*0.75=1`，也就是说当 put 第二个 key 的时候，map 就需要进行 resize。通过设置断点让线程 1 和线程 2 同时 debug 到 transfer 方法的首行。注意此时两个线程已经成功添加数据。放开 thread1 的断点至 transfer 方法的“Entry next = e.next;” 这一行；然后放开线程 2 的的断点，让线程 2 进行 resize。结果如下图。
 
 ![断点调试图](https://ngte-superbed.oss-cn-beijing.aliyuncs.com/superbed/2021/07/16/60f18e4d5132923bf8417c48.jpg)

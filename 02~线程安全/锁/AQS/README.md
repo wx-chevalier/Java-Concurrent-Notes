@@ -18,7 +18,7 @@ static final class NonfairSync extends Sync {
 		}
   ...
 }
-```java
+```
 这块代码的含义为：
 
 - 若通过 CAS 设置变量 State（同步状态）成功，也就是获取锁成功，则将当前线程设置为独占线程。
@@ -47,5 +47,5 @@ static final class FairSync extends Sync {
 	}
   ...
 }
-```java
+```
 结合公平锁和非公平锁的加锁流程，虽然流程上有一定的不同，但是都调用了 Acquire 方法，而 Acquire 方法是 FairSync 和 UnfairSync 的父类 AQS 中的核心方法。

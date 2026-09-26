@@ -17,7 +17,7 @@ dependency to your `pom.xml` file:
     <artifactId>disq</artifactId>
     <version>0.12</version>
 </dependency>
-```java
+```
 Then, you can use it like that:
 
 ```java
@@ -33,4 +33,4 @@ Disq<String> disq = Disq.builder(processor)
 
 disq.submit("some item");
 disq.submit("another item");
-```java
+```

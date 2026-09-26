@@ -12,7 +12,7 @@ public ReentrantLock() {
 public ReentrantLock(boolean fair) {
     sync = fair ? new FairSync() : new NonfairSync();
 }
-```java
+```
 我们首先概览下 ReentrantLock 加解锁的过程，公平锁具体是由其子类(FairSync)来实现的，其 tryAcquire 方法如下：
 
 ```java
@@ -35,7 +35,7 @@ protected final boolean tryAcquire(int acquires) {
 	}
 	return false;
 }
-```java
+```
 首先会判断 AQS 中的 state 是否等于 0，0 表示目前没有其他线程获得锁，当前线程就可以尝试获取锁。尝试之前会利用 hasQueuedPredecessors() 方法来判断 AQS 的队列中中是否有其他线程，如果有则不会尝试获取锁(这是公平锁特有的情况)。如果队列中没有线程就利用 CAS 来将 AQS 中的 state 修改为 1，也就是获取锁，获取成功则将当前线程置为获得锁的独占线程(setExclusiveOwnerThread(current))。如果 state 大于 0 时，说明锁已经被获取了，则需要判断获取锁的线程是否为当前线程(ReentrantLock 支持重入)，是则需要将 state + 1，并将值更新。
 
 如果 tryAcquire(arg) 获取锁失败，则需要用 addWaiter(Node.EXCLUSIVE) 将当前线程写入队列中。写入之前需要将当前线程包装为一个 Node 对象(addWaiter(Node.EXCLUSIVE))。
@@ -55,7 +55,7 @@ private Node addWaiter(Node mode) {
     enq(node);
     return node;
 }
-```java
+```
 首先判断队列是否为空，不为空时则将封装好的 Node 利用 CAS 写入队尾，如果出现并发写入失败就需要调用 enq(node); 来写入了。
 
 ```java
@@ -74,7 +74,7 @@ private Node enq(final Node node) {
         }
     }
 }
-```java
+```
 写入队列之后需要将当前线程挂起(利用 acquireQueued(addWaiter(Node.EXCLUSIVE), arg))：
 
 ```java
@@ -99,7 +99,7 @@ final boolean acquireQueued(final Node node, int arg) {
             cancelAcquire(node);
     }
 }
-```java
+```
 首先会根据 node.predecessor() 获取到上一个节点是否为头节点，如果是则尝试获取一次锁，获取成功就万事大吉了。如果不是头节点，或者获取锁失败，则会根据上一个节点的 waitStatus 状态来处理(shouldParkAfterFailedAcquire(p, node))。waitStatus 用于记录当前节点的状态，如节点取消、节点等待等。shouldParkAfterFailedAcquire(p, node) 返回当前线程是否需要挂起，如果需要则调用 parkAndCheckInterrupt()：
 
 ```java
@@ -107,7 +107,7 @@ private final boolean parkAndCheckInterrupt() {
     LockSupport.park(this);
     return Thread.interrupted();
 }
-```java
+```
 他是利用 LockSupport 的 part 方法来挂起当前线程的，直到被唤醒。公平锁与非公平锁的差异主要在获取锁：公平锁就相当于买票，后来的人需要排到队尾依次买票，不能插队。而非公平锁则没有这些规则，是抢占模式，每来一个人不会去管队列如何，直接尝试获取锁。
 
 ```java
@@ -118,7 +118,7 @@ final void lock() {
     else
         acquire(1);
 }
-```java
+```
 还要一个重要的区别是在尝试获取锁时 tryAcquire(arg)，非公平锁是不需要判断队列中是否还有其他线程，也是直接尝试获取锁：
 
 ```java
@@ -141,7 +141,7 @@ final boolean nonfairTryAcquire(int acquires) {
     }
     return false;
 }
-```java
+```
 ![加锁流程概述](https://s3.ax1x.com/2021/02/01/yePmn0.png)
 
 公平锁和非公平锁的释放流程都是一样的：
@@ -173,7 +173,7 @@ protected final boolean tryRelease(int releases) {
     setState(c);
     return free;
 }
-```java
+```
 首先会判断当前线程是否为获得锁的线程，由于是重入锁所以需要将 state 减到 0 才认为完全释放锁。释放之后需要调用 unparkSuccessor(h) 来唤醒被挂起的线程。
 
 # 线程加入等待队列
@@ -200,7 +200,7 @@ private Node addWaiter(Node mode) {
 private final boolean compareAndSetTail(Node expect, Node update) {
 	return unsafe.compareAndSwapObject(this, tailOffset, expect, update);
 }
-```java
+```
 主要的流程如下：
 
 - 通过当前的线程和锁模式新建一个节点。
@@ -272,7 +272,7 @@ public final boolean hasQueuedPredecessors() {
 	Node s;
 	return h != t && ((s = h.next) == null || s.thread != Thread.currentThread());
 }
-```java
+```
 双向链表中，第一个节点为虚节点，其实并不存储任何信息，只是占位。真正的第一个有数据的节点，是在第二个节点开始的。当 h != t 时：如果(s = h.next) == null，等待队列正在有线程进行初始化，但只是进行到了 Tail 指向 Head，没有将 Head 指向 Tail，此时队列中有元素，需要返回 True（这块具体见下边代码分析）。如果(s = h.next) != null，说明此时队列中至少有一个有效节点。如果此时 s.thread == Thread.currentThread()，说明等待队列的第一个有效节点中的线程与当前线程相同，那么当前线程是可以获取资源的；如果 s.thread != Thread.currentThread()，说明等待队列的第一个有效节点线程与当前线程不同，当前线程必须加入进等待队列。
 
 ```java
@@ -288,7 +288,7 @@ if (t == null) { // Must initialize
 		return t;
 	}
 }
-```java
+```
 节点入队不是原子操作，所以会出现短暂的 head != tail，此时 Tail 指向最后一个节点，而且 Tail 指向 Head。如果 Head 没有指向 Tail（可见 5、6、7 行），这种情况下也需要将相关线程加入队列中。所以这块代码是为了解决极端情况下的并发问题。
 
 # 等待队列中线程出队列时机
@@ -300,7 +300,7 @@ public final void acquire(int arg) {
 	if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
 		selfInterrupt();
 }
-```java
+```
 上文解释了 addWaiter 方法，这个方法其实就是把对应的线程以 Node 的数据结构形式加入到双端队列里，返回的是一个包含该线程的 Node。而这个 Node 会作为参数，进入到 acquireQueued 方法中。acquireQueued 方法可以对排队中的线程进行“获锁”操作。总的来说，一个线程获取锁失败了，被放入等待队列，acquireQueued 会把放入队列中的线程不断去获取锁，直到获取成功或者不再需要获取（中断）。
 
 ```java
@@ -333,7 +333,7 @@ final boolean acquireQueued(final Node node, int arg) {
 			cancelAcquire(node);
 	}
 }
-```java
+```
 注：setHead 方法是把当前节点置为虚节点，但并没有修改 waitStatus，因为它是一直需要用的数据。
 
 ```java
@@ -368,7 +368,7 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 	return false;
 }
 
-```java
+```
 parkAndCheckInterrupt 主要用于挂起当前线程，阻塞调用栈，返回当前线程的中断状态。
 
 ```java
@@ -378,7 +378,7 @@ private final boolean parkAndCheckInterrupt() {
     LockSupport.park(this);
     return Thread.interrupted();
 }
-```java
+```
 上述方法的流程图如下：
 
 ![线程获取流程](https://s3.ax1x.com/2021/02/01/yZOqYt.png)
@@ -411,7 +411,7 @@ final boolean acquireQueued(final Node node, int arg) {
 			cancelAcquire(node);
 		}
 }
-```java
+```
 通过 cancelAcquire 方法，将 Node 的状态标记为 CANCELLED。接下来，我们逐行来分析这个方法的原理：
 
 ```java
@@ -451,7 +451,7 @@ private void cancelAcquire(Node node) {
 		node.next = node; // help GC
 	}
 }
-```java
+```
 当前的流程：
 
 - 获取当前节点的前驱节点，如果前驱节点的状态是 CANCELLED，那就一直往前遍历，找到第一个 waitStatus <= 0 的节点，将找到的 Pred 节点和当前 Node 关联，将当前 Node 设置为 CANCELLED。
@@ -479,7 +479,7 @@ private void cancelAcquire(Node node) {
 do {
 	node.prev = pred = pred.prev;
 } while (pred.waitStatus > 0);
-```java
+```
 # 如何解锁
 
 我们已经剖析了加锁过程中的基本流程，接下来再对解锁的基本流程进行分析。由于 ReentrantLock 在解锁的时候，并不区分公平锁和非公平锁，所以我们直接看解锁的源码：
@@ -490,7 +490,7 @@ do {
 public void unlock() {
 	sync.release(1);
 }
-```java
+```
 可以看到，本质释放锁的地方，是通过框架来完成的。
 
 ```java
@@ -505,7 +505,7 @@ public final boolean release(int arg) {
 	}
 	return false;
 }
-```java
+```
 在 ReentrantLock 里面的公平锁和非公平锁的父类 Sync 定义了可重入锁的释放锁机制。
 
 ```java
@@ -542,7 +542,7 @@ public final boolean release(int arg) {
 	}
 	return false;
 }
-```java
+```
 - h == null Head 还没初始化。初始情况下，head == null，第一个节点入队，Head 会被初始化一个虚拟节点。所以说，这里如果还没来得及入队，就会出现 head == null 的情况。
 - h != null && waitStatus == 0 表明后继节点对应的线程仍在运行中，不需要唤醒。
 - h != null && waitStatus < 0 表明后继节点可能被阻塞了，需要唤醒。
@@ -571,7 +571,7 @@ private void unparkSuccessor(Node node) {
 	if (s != null)
 		LockSupport.unpark(s.thread);
 }
-```java
+```
 为什么要从后往前找第一个非 Cancelled 的节点呢？原因如下。之前的 addWaiter 方法：
 
 ```java
@@ -591,7 +591,7 @@ private Node addWaiter(Node mode) {
 	enq(node);
 	return node;
 }
-```java
+```
 我们从这里可以看到，节点入队并不是原子操作，也就是说，node.prev = pred; compareAndSetTail(pred, node) 这两个地方可以看作 Tail 入队的原子操作，但是此时 pred.next = node;还没执行，如果这个时候执行了 unparkSuccessor 方法，就没办法从前往后找了，所以需要从后往前找。还有一点原因，在产生 CANCELLED 状态节点的时候，先断开的是 Next 指针，Prev 指针并未断开，因此也是必须要从后往前遍历才能够遍历完全部的 Node。综上所述，如果是从前往后找，由于极端情况下入队的非原子操作和 CANCELLED 节点产生过程中断开 Next 指针的操作，可能会导致无法遍历所有的节点。所以，唤醒对应的线程后，对应的线程就会继续往下执行。继续执行 acquireQueued 方法以后，中断如何处理？
 
 # 中断恢复后的执行流程
@@ -605,7 +605,7 @@ private final boolean parkAndCheckInterrupt() {
 	LockSupport.park(this);
 	return Thread.interrupted();
 }
-```java
+```
 再回到 acquireQueued 代码，当 parkAndCheckInterrupt 返回 True 或者 False 的时候，interrupted 的值不同，但都会执行下次循环。如果这个时候获取锁成功，就会把当前 interrupted 返回。
 
 ```java
@@ -631,7 +631,7 @@ final boolean acquireQueued(final Node node, int arg) {
 			cancelAcquire(node);
 	}
 }
-```java
+```
 如果 acquireQueued 为 True，就会执行 selfInterrupt 方法。
 
 ```java
@@ -640,7 +640,7 @@ final boolean acquireQueued(final Node node, int arg) {
 static void selfInterrupt() {
 	Thread.currentThread().interrupt();
 }
-```java
+```
 该方法其实是为了中断线程。但为什么获取了锁以后还要中断线程呢？这部分属于 Java 提供的协作式中断知识内容，感兴趣同学可以查阅一下。这里简单介绍一下：
 
 - 当中断线程被唤醒时，并不知道被唤醒的原因，可能是当前线程在等待中被中断，也可能是释放了锁以后被唤醒。因此我们通过 Thread.interrupted()方法检查中断标记（该方法返回了当前线程的中断状态，并将当前线程的中断标识设置为 False），并记录下来，如果发现该线程被中断过，就再中断一次。
@@ -659,7 +659,7 @@ public boolean tryLock(long timeout, TimeUnit unit)
         throws InterruptedException {
     return sync.tryAcquireNanos(1, unit.toNanos(timeout));
 }
-```java
+```
 还是调用了内部类里面的方法。我们继续向前探究：
 
 ```java
@@ -670,7 +670,7 @@ public final boolean tryAcquireNanos(int arg, long nanosTimeout)
     return tryAcquire(arg) ||
         doAcquireNanos(arg, nanosTimeout);
 }
-```java
+```
 这里的语义是：如果线程被中断了，那么直接抛出 InterruptedException。如果未中断，先尝试获取锁，获取成功就直接返回，获取失败则进入 doAcquireNanos。tryAcquire 我们已经看过，这里重点看一下 doAcquireNanos 做了什么。
 
 ```java
@@ -718,5 +718,5 @@ private boolean doAcquireNanos(int arg, long nanosTimeout)
             cancelAcquire(node);
     }
 }
-```java
+```
 doAcquireNanos 的流程简述为：线程先入等待队列，然后开始自旋，尝试获取锁，获取成功就返回，失败则在队列里找一个安全点把自己挂起直到超时时间过期。这里为什么还需要循环呢？因为当前线程节点的前驱状态可能不是 SIGNAL，那么在当前这一轮循环中线程不会被挂起，然后更新超时时间，开始新一轮的尝试。

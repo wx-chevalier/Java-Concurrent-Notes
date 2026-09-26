@@ -23,7 +23,7 @@ class CustomRunner implements Runnable {
         System.out.println("CustomRunner线程的ID为：" + Thread.currentThread().getId());
     }
 }
-```java
+```
 - 继承自 Thread 类，并重写其 run 方法：
 
 ```java
@@ -41,7 +41,7 @@ class CustomThread extends Thread {
         System.out.println("CustomThread线程的ID为：" + Thread.currentThread().getId());
     }
 }
-```java
+```
 - 以上两种方式都无法获取线程的返回值，如果想要获取线程的返回值，需要实现 Callable 接口：
 
 ```java
@@ -62,7 +62,7 @@ class Task implements Callable<Integer> {
 }
 // 输出：
 获得线程返回值：100
-```java
+```
 ### 1.2 线程属性
 
 - **编号 (ID)** ：用于标识线程的唯一编号，只读属性。
@@ -117,7 +117,7 @@ public class ThreadStop {
         System.out.println("线程终止");
     }
 }
-```java
+```
 ### 1.5 线程中断
 
 除了终止线程外，JDK 中提供了以下方法用于实现线程中断：
@@ -178,7 +178,7 @@ public class J3_Interrupted {
         thread.interrupt();
     }
 }
-```java
+```
 ## 二、基本概念
 
 ### 2.1 变量分类
@@ -221,7 +221,7 @@ public class J1_ThreadUnsafe {
         }
     }
 }
-```java
+```
 ## 三、原子性
 
 ### 3.1 定义
@@ -358,7 +358,7 @@ Java 语言中的顺序语义可以分为以下四类：
 int a = 1;
 int b = 2;
 int c = a + b;
-```java
+```
 同时为了保证单线下执行的正确性，处理器会将重排序指令的执行结果先写入到重排序缓冲器（ROB，Recorder Buffer）中，之后再按照这些指令被处理器读取的顺序提交到寄存器或者主内存中，因此虽然指令是乱序执行的，但结果却是顺序提交的，从而能够保证在单线程下的正确性。
 
 ### 5.4 内存重排序
@@ -410,7 +410,7 @@ public class J1_ThreadUnsafe {
         }
     }
 }
-```java
+```
 使用 synchronized 修饰 `inr()` 方法来保证线程安全：
 
 ```java
@@ -445,13 +445,13 @@ public class J2_SynchronizedSafe {
         }
     }
 }
-```java
+```
 通常我们把被修饰的方法体和代码块称为临界区，需要注意的是必须保证多线程锁住的是同一个临界区，否则依然是线程不安全的。如果将上面创建线程的方法修改为如下所示，此时 synchronized 锁住的是不同 IncreaseTask 对象的 `inc()` 方法，所以仍然是线程不安全的：
 
 ```java
 Thread thread1 = new Thread(new IncreaseTask());
 Thread thread2 = new Thread(new IncreaseTask());
-```java
+```
 synchronized 除了可以修饰方法外，还可以用于修饰代码块，此时可以使用 this 关键字作为句柄，但仍然需要保证两个线程调用的是同一个 IncreaseTask 实例，示例如下：
 
 ```java
@@ -482,7 +482,7 @@ public class J3_SynchronizedSafe {
         System.out.println(i);
     }
 }
-```java
+```
 如果想要调用不同的 `IncreaseTask()` 实例，又想保证线程安全，此时可以使用同一个对象作为 synchronized 关键字的句柄。为避免竞态，作为句柄的对象通常使用 `private final` 关键字进行修饰，示例如下：
 
 ```java
@@ -514,7 +514,7 @@ public class J4_SynchronizedSafe {
         System.out.println(i);
     }
 }
-```java
+```
 ### 6.2 显示锁
 
 显示锁是 `java.util.concurrent.locks.Lock` 接口的实例，该接口对显示锁进行了抽象，定义了如下方法：
@@ -563,7 +563,7 @@ public class J1_ThreadSafe {
         }
     }
 }
-```java
+```
 ReentrantLock 是一种可重入的锁，它能够对共享资源进行重复加锁，即持有该锁的线程再次获取该锁时不会被阻塞，但解锁次数与加锁次数必须要保持一致，此时才能完全解锁：
 
 ```java
@@ -579,13 +579,13 @@ try {
     reentrantLock.unlock();
     reentrantLock.unlock();
 }
-```java
+```
 ReentrantLock 即支持公平锁也支持非公平锁，公平锁在调度时候往往需要频繁切换上下文来保证在等待时间上的公平性，所以默认的 ReentrantLock 锁是非公平的，如果想要使用公平锁，可以在创建时进行指定：
 
 ```java
 // 参数为true,代表使用公平锁
 private static ReentrantLock fairLock = new ReentrantLock(true);
-```java
+```
 显示锁相比于内部锁提供了更高的灵活性，但容易存在锁泄露（某个线程持有锁后因为异常而导致锁无法被释放）等问题。而内部锁虽然灵活性不足，但不会存在锁泄露，并且虚拟机也会在编译时对内部锁进行适当的锁优化。
 
 ### 6.3 读写锁
@@ -684,7 +684,7 @@ public class ReadWriteLock {
         }
     }
 }
-```java
+```
 ### 6.4 锁优化
 
 **1. 锁消除**
@@ -702,7 +702,7 @@ public class LockElision {
         return buffer.toString();
     }
 }
-```java
+```
 此时的 StringBuffer 实例对象只是一个局部变量，并且该对象并没有被发布到其他线程，因此其对应的内部锁会被消除。
 
 **2. 锁粗化**
@@ -738,7 +738,7 @@ boolean compareAndSwap (Variable V, Object A, Object B){
     }
     return false; //变量值已被其他线程修改，更新失败
 }
-```java
+```
 如果变量 V 的当前值和调用 CAS 时所提供的变量值 A (即变量的旧值) 一致，那么就说明其他线程并没有修改过变量 V 的值，此时就可以进行更新操作，否则操作失败，整个 CAS 操作的原子性由处理器来进行保证。由于 CAS 操作并不需要频繁的线程调度，因此其通常有着更好的性能表现，为了充分利用 CAS 的特性，JDK 提供了原子包来满足各种场景下的使用需求：
 
 | 分组       | 类                                                                             |
@@ -795,12 +795,12 @@ public class J1_SimpleType {
         executorService.shutdown();
     }
 }
-```java
+```
 在使用 CAS 的过程中，一个比较常见的隐患是 **A-B-A 问题**：如果其他线程在将共享变量的值修改为 B 后，又立即修改回原值，此时这次变更对于其他线程而言可能无法感知到。这对于计数等场景而言，是没有问题的，但在一些特别的场景下，就会导致错误。想要解决这个问题，可以在比较时候除了比较变量的值外，还应进行时间戳的比较，AtomicStampedReference 就是这种比较思路的一种实现。其更新值的方法定义如下：
 
 ```java
 compareAndSet(V expectedReference, V newReference, int expectedStamp, int newStamp)
-```java
+```
 ### 7.3 数组型
 
 数组型可以保证对数据内元素的操作是线程安全的，示例如下：
@@ -864,7 +864,7 @@ public class J3_ArrayElementThreadUnsafe {
 atomicIntegerArray size : [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000]
 vector size : [69966, 81954, 78605, 79144, 66532, 75082, 77324, 78723, 78022, 76294]
 arrayList size : [99045, 99173, 99251, 98609, 99248, 99191, 98848, 99181, 99212, 99083]
-```java
+```
 ### 7.4 字段更新型
 
 如果某个类的基本类型的字段在某一环境中存在线程安全，但该字段在多个环境中都有引用，此时直接修改该字段可能会导致多个环境都需要重新验证，在这种情况下可以使用字段更新型来保证其在特定环境下的线程安全：
@@ -915,7 +915,7 @@ public class J5_AtomicIntegerFieldUpdater {
         .....
     }
 }
-```java
+```
 需要注意的是由于 CAS 只能保证可见性，不能保证原子性，所以该变量必须使用 volatile 关键字修饰，并且由于 FieldUpdater 是采用反射机制来获取该变量的值，所以其也不能声明为 private 。另外 FieldUpdater 也不能用于 static 类型的变量。
 
 ## 八、线程间的协作
@@ -962,7 +962,7 @@ public class J3_WaitAndNotify {
 线程2开始操作
 对象object唤醒
 线程1后续操作
-```java
+```
 `notify()` 表示随机唤醒任意一个等待线程，如果想要唤醒所有等待线程，则可以使用 `notifyAll()` 方法：
 
 ```java
@@ -1010,13 +1010,13 @@ public class J5_NotifyAll {
 对象object唤醒
 线程2后续操作
 线程1后续操作
-```java
+```
 在上面的示例中，由于有两个线程处于等待状态，所以 `notifyAll()` 的效果等价于调用 `notify()` 两次：
 
 ```java
 object.notify();
 object.notify();
-```java
+```
 ### 8.2 条件变量
 
 综上所述可以使用 `wait()` 和 `notify()` 配合内部锁 synchronized 可以实现线程间的等待与唤醒，如果你使用的是显示锁而不是内部锁，此时可以使用 Condition 来实现同样的效果。Condition 接口中定义了如下方法：
@@ -1069,7 +1069,7 @@ Thread-0线程等待通知...
 主线程开始操作
 主线程唤醒
 Thread-0线程后续操作
-```java
+```
 ### 8.3 Join
 
 `Thread.join()` 可以让当前线程等待目标线程结束后再开始运行，示例如下：
@@ -1103,7 +1103,7 @@ public class J2_Join {
     }
 }
 // 此时主线程需要等待子线程运行完成，输出结果为：100000
-```java
+```
 ### 8.4 CountDownLatch
 
 `Thread.join()` 可以让当前线程等待目标线程结束后再开始运行，但大多数时候，你只需要等待目标线程完成特定的操作，而不必等待其完全终止。此时可以使用条件变量 Condition 来实现，也可以使用更为简单的工具类 CountDownLatch 。CountDownLatch 会在内部维护一个计数器，每次完成一个任务，则计数器减 1，当计数器为 0 时，则唤醒所有的等待线程，示例如下：
@@ -1171,7 +1171,7 @@ public class J2_CountDown {
 }
 
 // 使用CountDownLatch 时，主线程需要等待所有的子线程计算完成后再输出，计算结果为：100
-```java
+```
 ### 8.5 CyclicBarrier
 
 CyclicBarrier 和 CountDownLatch 类似，都是用于等待一个或者多个线程完成特定的任务后再执行某项操作，但不同的是它可以循环使用，示例如下：
@@ -1220,7 +1220,7 @@ public class J1_CyclicBarrier {
 任务18执行完成
 任务16执行完成
 五人小组任务执行完成
-```java
+```
 基于 CyclicBarrier 的特性，通常可以用于在测试环境来模仿高并发，如每次等待一万个线程启动后再让其并发执行某项压力测试。
 
 ### 8.6 Semaphore
@@ -1268,7 +1268,7 @@ public class J1_Semaphore {
 22获得锁!
 23获得锁!
 ....
-```java
+```
 ### 8.7 LockSupport
 
 LockSupport 可以在线程内的任意位置实现阻塞。它采用和 Semaphore 类似的信号量机制：它为每个线程准备一个许可，如果许可可用，则 `park()` 方法会立即返回，并且消费掉这个许可，让许可不可用；此时因为许可不可用，相应的线程就会被阻塞。而 `unpark()` 则会使得一个许可从不可用变为可用。但和 Semaphore 不同的是：它的许可不能累加，你不可能拥有超过一个许可，它永远只有一个：
@@ -1304,7 +1304,7 @@ public class J1_LockSupport {
 主线程干预
 线程13解除阻塞
 线程14解除阻塞
-```java
+```
 ## 九、线程池
 
 ### 9.1 线程池分类
@@ -1345,7 +1345,7 @@ public class J1_ThreadPool {
         executorService.shutdown();
     }
 }
-```java
+```
 ### 9.2 定时任务
 
 上面线程池分类中的 `newSingleThreadScheduledExecutor()` 和 `newScheduledThreadPool()` 都可以用于创建支持定时任务的线程池，它们返回的都是 ScheduledExecutorService 接口的实例。ScheduledExecutorService 接口中定义了如下三类定时方法：
@@ -1367,7 +1367,7 @@ public ScheduledFuture<?> scheduleAtFixedRate(Runnable command,long initialDelay
  */
 public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay,long delay,
                                                  TimeUnit unit);
-```java
+```
 使用示例如下：
 
 ```java
@@ -1409,7 +1409,7 @@ public class J2_ScheduledTask {
     }
 
 }
-```java
+```
 ### 9.3 线程池内部实现
 
 不管是使用 `newFixedThreadPool()` 还是使用 `newCachedThreadPool()` 来创建线程池，其最终调用的都是 ThreadPoolExecutor 的构造器，定义如下：
@@ -1422,7 +1422,7 @@ public ThreadPoolExecutor(int corePoolSize,                      //核心线程�
                           BlockingQueue<Runnable> workQueue,     //任务队列
                           ThreadFactory threadFactory,           //线程工厂
                           RejectedExecutionHandler handler)      //拒绝策略
-```java
+```
 **1. 线程工厂**
 
 ThreadFactory 用于指定线程的创建方式，示例如下：
@@ -1438,7 +1438,7 @@ new ThreadFactory() {
         return thread;
     }
 }
-```java
+```
 **2. 拒绝策略**
 
 当线程池中可用线程的数量为 0，并且等待队列已满的情况下，线程池需要按照 RejectedExecutionHandler 指定的拒绝策略来决定如何处理后续提交任务，JDK 中默认提供了以下四种拒绝策略：
@@ -1470,7 +1470,7 @@ ExecutorService executorService = new ThreadPoolExecutor(10, 20, 0L, TimeUnit.MI
         System.out.println("线程池退出");
     }
 };
-```java
+```
 ### 9.5 线程池大小
 
 线程池的大小可以通过以下公式进行估算：
@@ -1508,7 +1508,7 @@ public class J0_Callable {
         executors.shutdown();
     }
 }
-```java
+```
 此时通过 `ExecutorService.submit()` 进行提交，得到的是一个 Future 对象，它包含了线程的执行结果，当你调用其 `get()` 方法时，它会阻塞直至获取到线程的返回结果。
 
 ### 10.2 FutureTask
@@ -1536,7 +1536,7 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
     System.out.println("futureTask02 计算结果为：" + futureTask01.get());
     executorService.shutdown();
 }
-```java
+```
 ### 10.3 CompletableFuture
 
 CompletableFuture 是 JDK 8 提供的增强后 Future ，它支持流式调用，等待唤醒等一系列新的功能：
@@ -1586,7 +1586,7 @@ public class J2_CompletableFuture {
     子线程等待主线程运算完成····
     主线程计算完成
     子线程完成后续运算:10000
-```java
+```
 **2. supplyAsync**
 
 CompletableFuture 的 supplyAsync 可以将一个正常的方法以异步的方式来执行：
@@ -1611,7 +1611,7 @@ public class J3_SupplyAsync {
         System.out.println("主线程计算完成:" + integer * integer);
     }
 }
-```java
+```
 **3. 流式调用**
 
 CompletableFuture 支持大部分流式处理的特性，示例如下：
@@ -1652,7 +1652,7 @@ public class J4_StreamingCall {
         future.get(); //类似于流式计算的惰性求值，如果缺少这一步，不会有任何输出
     }
 }
-```java
+```
 **4. 组合多个 CompletableFuture**
 
 除了使用单个的 CompletableFuture，还可以通过 thenCompose 或 thenCombineAsync 来组合多个 CompletableFuture：
@@ -1687,7 +1687,7 @@ public class J6_Combination {
 
     }
 }
-```java
+```
 ## 十一、ThreadLocal
 
 ThreadLocal 是以增加资源的方式来避免竞态，它会为每一个线程创建一份私有的资源，从而避免对公共资源的竞争。实例如下：
@@ -1728,7 +1728,7 @@ public class J1_ThreadUnsafe {
         System.out.println("格式化成功次数为：" + atomicInteger.get());
     }
 }
-```java
+```
 因为 SimpleDateFormat 是线程不安全的，因此其格式化成功的次数总是小于 100 次，此时可以使用 ThreadLocal 进行改写，让每个线程都持有自己独立的格式化器，具体如下：
 
 ```java
@@ -1770,7 +1770,7 @@ public class J2_ThreadSafe {
         executorService.shutdown();
     }
 }
-```java
+```
 ## 参考资料
 
 1. 黄文海 . Java 多线程编程实战指南（核心篇）. 电子工业出版社 . 2017-04

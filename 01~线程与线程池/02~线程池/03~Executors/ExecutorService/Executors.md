@@ -28,7 +28,7 @@ public static void main(String[] args) {
 //	   run(singleThreadPool);
 //	   run(scheduledThreadPool);
 }
-```java
+```
 # CachedThreadPool
 
 CachedThreadPool 会创建一个缓存区，将初始化的线程缓存起来。会终止并且从缓存中移除已有 60 秒未被使用的线程。如果线程有可用的，就使用之前创建好的线程，如果线程没有可用的，就新创建线程。
@@ -49,7 +49,7 @@ public static ExecutorService newCachedThreadPool() {
                                     TimeUnit.SECONDS,
                                     new SynchronousQueue<Runnable>());
 }
-```java
+```
 # FixedThreadPool
 
 在 FixedThreadPool 中，有一个固定大小的池。如果当前需要执行的任务超过池大小，那么多出的任务处于等待状态，直到有空闲下来的线程执行任务，如果当前需要执行的任务小于池大小，空闲的线程也不会去销毁。
@@ -75,7 +75,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
                                       new LinkedBlockingQueue<Runnable>());
 }
 
-```java
+```
 执行结果：创建了一个固定大小的线程池，容量为 3，然后循环执行了 4 个任务。由输出结果可以看到，前 3 个任务首先执行完，然后空闲下来的线程去执行第 4 个任务。
 
 # SingleThreadExecutor
@@ -95,7 +95,7 @@ public static ExecutorService newSingleThreadExecutor() {
                                     TimeUnit.MILLISECONDS,
                                     new LinkedBlockingQueue<Runnable>()));
 }
-```java
+```
 # ScheduledThreadPool
 
 ScheduledThreadPool 是一个固定大小的线程池，与 FixedThreadPool 类似，执行的任务是定时执行。
@@ -111,7 +111,7 @@ public ScheduledThreadPoolExecutor(int corePoolSize) {
               TimeUnit.NANOSECONDS,
               new DelayedWorkQueue());
 }
-```java
+```
 为了持续的多次执行常见的任务，我们可以利用调度线程池 ScheduledExecutorService 支持任务调度，持续执行或者延迟一段时间后执行：
 
 ```java
@@ -125,7 +125,7 @@ TimeUnit.MILLISECONDS.sleep(1337);
 
 long remainingDelay = future.getDelay(TimeUnit.MILLISECONDS);
 System.out.printf("Remaining Delay: %sms", remainingDelay);
-```java
+```
 调度一个任务将会产生一个专门的 ScheduleFuture 类型，它除了提供了 Future 的所有方法之外，他还提供了 getDelay()方法来获得剩余的延迟。在延迟消逝后，任务将会并发执行。为了调度任务持续的执行，executors 提供了两个方法 s`cheduleAtFixedRate()` 和 `scheduleWithFixedDelay()`；第一个方法用来以固定频率来执行一个任务，比如，下面这个示例中，每分钟一次：
 
 ```java
@@ -136,5 +136,5 @@ Runnable task = () -> System.out.println("Scheduling: " + System.nanoTime());
 int initialDelay = 0;
 int period = 1;
 executor.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
-```java
+```
 另外，这个方法还接收一个初始化延迟，用来指定这个任务首次被执行等待的时长。需要注意的是，`scheduleAtFixedRate()` 并不考虑任务的实际用时。所以，如果你指定了一个 period 为 1 分钟而任务需要执行 2 分钟，那么线程池为了性能会更快的执行。在这种情况下，你应该考虑使用 scheduleWithFixedDelay()。这个方法的工作方式与上我们上面描述的类似。不同之处在于等待时间 period 的应用是在一次任务的结束和下一个任务的开始之间。

@@ -72,4 +72,4 @@ class ConsumeResourceTask implements Runnable {
 [10:30:27]pool-1-thread-9 资源使用结束，释放资源
 [10:30:29]pool-1-thread-7 资源使用结束，释放资源
 [10:30:32]pool-1-thread-10 资源使用结束，释放资源
-```java
+```

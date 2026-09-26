@@ -37,7 +37,7 @@ public class VolatileTest {
         System.out.println("race: " + race + " value: " + value);
     }
 }
-```java
+```
 # volatile 实现原理
 
 在 Java 内存模型中，通过 as-if-serial 和 happens-before(先行先发生) 来保证从重排的正确性，同时对于 volatile 变量有特殊的规则：对一个变量的写操作先行发生于后面对这个变量的读操作，保证了 volatile 变量的可见性；也就是说 JMM 保证新值能马上同步到主内存，同时把其他线程的工作内存中对应的变量副本置为无效，以及每次使用前立即从主内存读取共享变量。
@@ -45,7 +45,7 @@ public class VolatileTest {
 ```java
 instance = new Singleton(); // instance是volatile变量
 0x01a3de1d: movb $0×0,0×1104800(%esi);0x01a3de24: lock addl $0×0,(%esp);
-```java
+```
 将带有 volatile 变量操作的 Java 代码转换成汇编代码后，可以看到多了个 lock 前缀指令；这个 lock 指令是关键，在多核处理器下实现两个重要操作:
 
 - 将当前处理器缓存行的数据写回到系统内存。
@@ -100,7 +100,7 @@ public class AtomicReference <
         private volatile V value;
         // 省略其他代码
         ｝
-```java
+```
 追加字节能优化性能？这种方式看起来很神奇，但如果深入理解处理器架构就能理解其中的奥秘。让我们先来看看 LinkedTransferQueue 这个类，它使用一个内部类类型来定义队列的头节点（head）和尾节点（tail），而这个内部类 PaddedAtomicReference 相对于父类 AtomicReference 只做了一件事情，就是将共享变量追加到 64 字节。我们可以来计算下，一个对象的引用占 4 个字节，它追加了 15 个变量（共占 60 个字节），再加上父类的 value 变量，一共 64 个字节。
 
 为什么追加 64 字节能够提高并发编程的效率呢？因为对于英特尔酷睿 i7、酷睿、Atom 和 NetBurst，以及 Core Solo 和 Pentium M 处理器的 L1、L2 或 L3 缓存的高速缓存行是 64 个字节宽，不支持部分填充缓存行，这意味着，如果队列的头节点和尾节点都不足 64 字节的话，处理器会将它们都读到同一个高速缓存行中，在多处理器下每个处理器都会缓存同样的头、尾节点，当一个处理器试图修改头节点时，会将整个缓存行锁定，那么在缓存一致性机制的作用下，会导致其他处理器不能访问自己高速缓存中的尾节点，而队列的入队和出队操作则需要不停修改头节点和尾节点，所以在多处理器的情况下将会严重影响到队列的入队和出队效率。Douglea 使用追加到 64 字节的方式来填满高速缓冲区的缓存行，避免头节点和尾节点加载到同一个缓存行，使头、尾节点在修改时不会互相锁定。

@@ -11,7 +11,7 @@ String result = completableFuture.get()
 
 // 设置 Future 完成
 completableFuture.complete("Future's Result")
-```java
+```
 我们也可以手动地监听完成函数：
 
 ```java
@@ -25,7 +25,7 @@ completableFuture.whenComplete(new BiConsumer() {
 }); // complete the task
 
 completableFuture.complete(new Object())
-```java
+```
 # 链式调用与转换
 
 CompletableFuture 还提供了 runAsync/supplyAsync 等静态方法，让我们创建便捷地异步执行流程：
@@ -46,7 +46,7 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
     TimeUnit.SECONDS.sleep(1);
     return "Result of the asynchronous computation";
 }, executor);
-```java
+```
 ```java
 // CompletionStage 是一个接口，从命名上看得知是一个完成的阶段，它里面的方法也标明是在某个运行阶段得到了结果之后要做的事情。
 public <U> CompletionStage<U> thenApply(Function<? super T,? extends U> fn);
@@ -67,7 +67,7 @@ CompletableFuture<String> welcomeText = CompletableFuture.supplyAsync(() -> {
 });
 
 System.out.println(welcomeText.get());
-```java
+```
 CompletableFuture 的 `then*` 方法会生成 CompletionStage 对象，该对象的 `then*` 方法能够接收 Consumer:
 
 ```java
@@ -82,7 +82,7 @@ CompletableFuture.supplyAsync(() -> {
 }).thenAccept(product -> {
 	System.out.println("Got product detail from remote service " + product.getName())
 });
-```java
+```
 thenAccept()可以访问 CompletableFuture 的结果，但 thenRun()不能访 Future 的结果，它持有一个 Runnable 返回 CompletableFuture:
 
 ```java
@@ -97,7 +97,7 @@ CompletableFuture.supplyAsync(() -> {
 }).thenRun(() -> {
     // Computation Finished.
 });
-```java
+```
 # 组合
 
 使用 thenCompose()组合两个独立的 future, thenCombine() 当两个独立的 Future 都完成的时候，用来做一些事情。
@@ -130,7 +130,7 @@ CompletableFuture<Double> combinedFuture = weightInKgFuture
 });
 
 System.out.println("Your BMI is - " + combinedFuture.get());
-```java
+```
 CompletableFuture.allOf 的使用场景是当你一个列表的独立 future，并且你想在它们都完成后并行的做一些事情。
 
 ```java
@@ -145,14 +145,14 @@ List<CompletableFuture<String>> pageContentFutures = webPageLinks.stream()
 CompletableFuture<Void> allFutures = CompletableFuture.allOf(
         pageContentFutures.toArray(new CompletableFuture[pageContentFutures.size()])
 );
-```java
+```
 CompletableFuture.anyOf()和其名字介绍的一样，当任何一个 CompletableFuture 完成的时候，返回一个新的 CompletableFuture。
 
 ```java
 CompletableFuture<Object> anyOfFuture = CompletableFuture.anyOf(future1, future2, future3);
 
 System.out.println(anyOfFuture.get()); // Result of Future 2
-```java
+```
 # 异常处理
 
 如果在原始的 supplyAsync()任务中发生一个错误，这时候没有任何 thenApply 会被调用并且 future 将以一个异常结束。如果在第一个 thenApply 发生错误，这时候第二个和第三个将不会被调用，同样的，future 将以异常结束。
@@ -168,7 +168,7 @@ CompletableFuture.supplyAsync(() -> {
 }).thenAccept(result -> {
 	// do something with the final result
 });
-```java
+```
 使用 exceptionally() 回调处理异常 exceptionally()回调给你一个从原始 Future 中生成的错误恢复的机会。你可以在这里记录这个异常并返回一个默认值。
 
 ```java
@@ -180,7 +180,7 @@ CompletableFuture<String> maturityFuture = CompletableFuture.supplyAsync(() -> {
     System.out.println("Oops! We have an exception - " + ex.getMessage());
     return "Unknown!";
 });。
-```java
+```
 使用 handle() 方法处理异常 API 提供了一个更通用的方法，handle()从异常恢复，无论一个异常是否发生它都会被调用。
 
 ```java
@@ -193,5 +193,5 @@ CompletableFuture<String> maturityFuture = CompletableFuture.supplyAsync(() -> {
     }
     return res;
 });
-```java
+```
 如果异常发生，res 参数将是 null，否则，ex 将是 null。

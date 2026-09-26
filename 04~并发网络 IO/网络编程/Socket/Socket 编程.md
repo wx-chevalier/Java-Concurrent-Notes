@@ -53,7 +53,7 @@ public class GreetingClient
       }
    }
 }
-```java
+```
 # Socket 服务端
 
 如下的 GreetingServer 程序是一个服务器端应用程序，使用 Socket 来监听一个指定的端口。
@@ -112,4 +112,4 @@ public class GreetingServer extends Thread
       }
    }
 }
-```java
+```

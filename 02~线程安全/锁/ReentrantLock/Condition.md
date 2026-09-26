@@ -67,7 +67,7 @@ public class MyQueue {​
         }
     }​
 }
-```java
+```
 测试类：
 
 ```java
@@ -94,5 +94,5 @@ public class TestMyQueue {​
         }​
     }​
 }
-```java
+```
 # 实现原理

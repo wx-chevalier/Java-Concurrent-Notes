@@ -4,14 +4,14 @@
 
 ```java
 public void countDown()
-```java
+```
 递减锁存器的计数，如果计数到达零，则释放所有等待的线程。如果当前计数大于零，则将计数减少。如果新的计数为零，出于线程调度目的，将重新启用所有的等待线程。如果当前计数等于零，则不发生任何操作。
 
 ```java
 public boolean await(long timeout,
                      TimeUnit unit)
               throws InterruptedException
-```java
+```
 使当前线程在锁存器倒计数至零之前一直等待，除非线程被中断或超出了指定的等待时间。如果当前计数为零，则此方法立刻返回 true 值。如果当前计数大于零，则出于线程调度目的，将禁用当前线程，且在发生以下三种情况之一前，该线程将一直处于休眠状态：
 
 - 由于调用 countDown() 方法，计数到达零；
@@ -58,4 +58,4 @@ begin.countDown();
 end.await();
 System.out.println("Game Over");
 exec.shutdown();
-```java
+```

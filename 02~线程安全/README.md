@@ -26,7 +26,7 @@ public boolean offer(E e) {
         lock.unlock();
     }
 }
-```java
+```
 # 原子变量
 
 原子变量能够保证原子性的操作，意思是某个任务在执行过程中，要么全部成功，要么全部失败回滚，恢复到执行之前的初态，不存在初态和成功之间的中间状态。例如 CAS 操作，要么比较并交换成功，要么比较并交换失败。由 CPU 保证原子性。通过原子变量可以实现线程安全。执行某个任务的时候，先假定不会有冲突，若不发生冲突，则直接执行成功；当发生冲突的时候，则执行失败，回滚再重新操作，直到不发生冲突。
@@ -65,5 +65,5 @@ public final int getAndAdd(int delta) {
 public final boolean compareAndSet(int expect, int update) {
     return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
 }
-```java
+```
 在高度竞争的情况下，锁的性能将超过原子变量的性能，但是更真实的竞争情况下，原子变量的性能将超过锁的性能。同时原子变量不会有死锁等活跃性问题。

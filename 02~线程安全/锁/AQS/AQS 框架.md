@@ -61,7 +61,7 @@ waitStatus 有下面几个枚举值：
 // java.util.concurrent.locks.AbstractQueuedSynchronizer
 
 private volatile int state;
-```java
+```
 下面提供了几个访问这个字段的方法：
 
 | 方法名                                                             | 描述                    |
@@ -134,7 +134,7 @@ public final void acquire(int arg) {
 protected boolean tryAcquire(int arg) {
 	throw new UnsupportedOperationException();
 }
-```java
+```
 具体获取锁的实现方法是由各自的公平锁和非公平锁单独实现的（以 ReentrantLock 为例）。如果该方法返回了 True，则说明当前线程获取锁成功，就不用往后执行了；如果获取失败，就需要加入到等待队列中。下面会详细解释线程是何时以及怎样被加入进等待队列中的。
 
 # AQS 应用
@@ -175,14 +175,14 @@ else if (current == getExclusiveOwnerThread()) {
 	setState(nextc);
 	return true;
 }
-```java
+```
 从上面这两段都可以看到，有一个同步状态 State 来控制整体可重入的情况。State 是 Volatile 修饰的，用于保证一定的可见性和有序性。
 
 ```java
 // java.util.concurrent.locks.AbstractQueuedSynchronizer
 
 private volatile int state;
-```java
+```
 - State 初始化的时候为 0，表示没有任何线程持有锁。
 - 当有线程持有该锁时，值就会在原来的基础上+1，同一个线程多次获得锁是，就会多次+1，这里就是可重入的概念。
 - 解锁也是对这个字段-1，一直到 0，此线程对锁释放。
@@ -232,7 +232,7 @@ public class LeeLock  {
         sync.release(1);
     }
 }
-```java
+```
 通过我们自己定义的 Lock 完成一定的同步功能。
 
 ```java
@@ -268,7 +268,7 @@ public class LeeMain {
         System.out.println(count);
     }
 }
-```java
+```
 # Links
 
 - [2021~源码级深挖 AQS 队列同步器](https://mp.weixin.qq.com/s/cJ0t1vQGzBe6AnaB8sYXaA): 通过理解队列同步器的工作原理，对我们了解和使用这些工具类会有很大的帮助。

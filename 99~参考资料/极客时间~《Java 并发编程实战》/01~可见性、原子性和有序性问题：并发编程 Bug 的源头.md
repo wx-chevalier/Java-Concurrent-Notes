@@ -54,7 +54,7 @@ public class Counter {
     return counter.count;
   }
 }
-```java
+```
 在这个例子中，我们创建了两个线程，每个线程都将 count 增加 10000 次。理论上，最终的 count 值应该是 20000。但是，由于可见性问题，实际结果可能小于 20000。
 
 这是因为每个线程可能在自己的 CPU 缓存中操作 count 值，而不是直接在主内存中操作。当线程将更新后的值写回主内存时，可能会覆盖其他线程的更新，导致一些增量操作丢失。
@@ -104,7 +104,7 @@ public class Singleton {
     return instance;
   }
 }
-```java
+```
 这段代码看似没有问题，但由于指令重排，new Singleton() 这个操作可能被分解并重排为：
 
 1. 分配内存空间

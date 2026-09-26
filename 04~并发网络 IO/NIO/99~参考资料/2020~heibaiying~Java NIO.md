@@ -60,7 +60,7 @@ public abstract class Buffer {
     private int mark = -1;
     ...
 }
-```java
+```
 - **容量 (Capacity)** ：缓冲区所能容纳元素的个数。
 - **上界 (Limit)**：缓冲区中现存元素的个数。
 - **位置 (Position)**：下一个待操作元素的索引。
@@ -74,13 +74,13 @@ public abstract class Buffer {
 
 ```java
 CharBuffer buffer = CharBuffer.allocate(100);
-```java
+```
 - **wrap()**：通过为缓冲区指定初始化数组来创建：
 
 ```java
 char[] chars = new char[100];
 CharBuffer buffer = CharBuffer.wrap(chars);
-```java
+```
 实际上，在缓冲区内部就是通过数组来存储元素，以 CharBuffer 为例，它的内部维持有一个名为 `hb` 的数组，用来存放实际的元素：
 
 ```java
@@ -89,7 +89,7 @@ public abstract class CharBuffer extends Buffer implements Comparable<CharBuffer
     final char[] hb;
     ...
 }
-```java
+```
 缓冲区创建完成后，它处于以下初始状态：
 
 <div align="center"> <img src="https://gitee.com/heibaiying/Full-Stack-Notes/raw/master/pictures/buffer_init.png"/> </div>
@@ -109,7 +109,7 @@ put(String src, int start, int end)
 put(char[] src)
 // 使用数组填充数据，offset为数组填充的开始位置，length为填充的长度,不允许越界
 put(char[] src, int offset, int length)
-```java
+```
 当我们向 Buffer 中添加数据后，position 属性也会随之变动：
 
 <div align="center"> <img src="https://gitee.com/heibaiying/Full-Stack-Notes/raw/master/pictures/buffer_put.png"/> </div>
@@ -127,7 +127,7 @@ char get(int index);
 CharBuffer get(char[] dst)
 // 获取数据并填充到数据中，offset为数组填充的开始位置，length为填充的长度,不允许越界
 CharBuffer get(char[] dst, int offset, int length)
-```java
+```
 **3. flip()**
 
 该方法会将 position 的值赋给 limit，然后将 position 设置为 0，从而可以由写模式切换到读模式。无论任何情况，只要由写操作转换到读操作，都需要先执行该方法。示例如下：
@@ -140,7 +140,7 @@ while (buffer.hasRemaining()) {
     System.out.println(buffer.get());
 }
 buffer.clear();
-```java
+```
 当使用 `filp()` 将 Buffer 由写模式切换到读模式后：position 属性会恢复到初始位置，代表从此处开始读取数据；limit 属性也会随之变动，代表我们所能读取数据的上界：
 
 <div align="center"> <img src="https://gitee.com/heibaiying/Full-Stack-Notes/raw/master/pictures/buffer_flip.png"/> </div>
@@ -177,7 +177,7 @@ buffer.clear();
 
 ```java
  buffer.position(2).mark().position(5).reset().position(); //从位置2移动到位置5，之后又恢复到位置2
-```java
+```
 ### 2.4 复制缓冲区
 
 如果想要对一个已有的缓冲区进行复制，可以有以下三种方法：
@@ -186,7 +186,7 @@ buffer.clear();
 public abstract CharBuffer duplicate();
 public abstract CharBuffer asReadOnlyBuffer();
 public abstract CharBuffer slice();
-```java
+```
 使用 `duplicate()` 复制的缓冲区具有以下特性：
 
 - 与原缓冲区共享相同的数据元素，这意味着对原缓冲区数据的修改也会影响复制缓冲区；
@@ -214,14 +214,14 @@ CharBuffer slice = buffer.slice();
 System.out.println("buffer:" + buffer.position() + "," + buffer.limit());     // buffer:3,6
 System.out.println("duplicate:" + duplicate.position() + "," + duplicate.limit()); // duplicate:2,5
 System.out.println("slice:" + slice.position() + "," + slice.limit());        //slice:0,3
-```java
+```
 ### 2.5 直接缓冲区
 
 ByteBuffer 支持使用 `allocateDirect()` 方法来创建直接缓冲区，示例如下：
 
 ```java
 ByteBuffer byteBuffer = ByteBuffer.allocate(100);
-```java
+```
 ## 三、Channel
 
 ### 3.1 通道基础
@@ -238,7 +238,7 @@ public interface Channel extends Closeable {
 
     public void close() throws IOException;
 }
-```java
+```
 对于常见的文件操作和网络操作都可以直接获取到其对应的 Channel：
 
 ```java
@@ -253,7 +253,7 @@ SocketChannel socketChannel = socket.getChannel();
 // 获取FileChannel
 FileInputStream fileInputStream = new FileInputStream(new File("path"));
 FileChannel fileChannel = fileInputStream.getChannel();
-```java
+```
 ### 3.2 文件通道
 
 FileChannel 是一个连接到文件的通道，通过该通道可以完成文件的读写。另外 FileChannel 无法设置为非阻塞模式，因为对文件读写操作设置非阻塞并没有什么意义。FileChannel 的使用示例如下：
@@ -281,7 +281,7 @@ try {
 } catch (IOException e) {
     e.printStackTrace();
 }
-```java
+```
 这里的最后我们只需要关闭 Stream 即可，其上的 Channel 也会被关闭，源码如下：
 
 ```java
@@ -303,7 +303,7 @@ public void close() throws IOException {
        }
     });
 }
-```java
+```
 ### 3.3 Channel To Channel
 
 在 Java NIO 中，如果两个 Channel 中有一个是 FileChannel，那么可以直接将数据从一个 Channel 传输到另外一个 Channel：
@@ -313,7 +313,7 @@ public void close() throws IOException {
 transferTo(long position, long count, WritableByteChannel target) ;
 // 将原通道上的数据直接传送到该通道
 transferFrom(ReadableByteChannel src, long position, long count)
-```java
+```
 还是以文件拷贝为例，使用示例如下：
 
 ```java
@@ -329,7 +329,7 @@ try {
 } catch (IOException e) {
     e.printStackTrace();
 }
-```java
+```
 ### 3.4 Scatter/Gather
 
 Java NIO 支持 scatter 和 gather 操作：
@@ -343,7 +343,7 @@ ByteBuffer buffer03 = ByteBuffer.allocate(128);
 
 ByteBuffer[] buffers = new ByteBuffer[]{buffer01, buffer02, buffer03};
 fileInputStream.getChannel().read(buffers);
-```java
+```
 此时 Channel 中的数据会依次写入到 Buffer01，Buffer02，Buffer03 上。Scatter 通常用于固定长度数据的处理，假设一个数据单元由 header，body，footer 三部分组成，并且每部分的长度都是固定的，此时通过 Scatter 操作，每一组数据的 header，body，footer 都会分别固定地写到 Buffer01，Buffer02，Buffer03 上，此时就可以对每个 Buffer 应用不同的处理逻辑：
 
 <div align="center"> <img src="https://gitee.com/heibaiying/Full-Stack-Notes/raw/master/pictures/nio_scatter.png"/> </div>
@@ -357,7 +357,7 @@ ByteBuffer buffer03 = ByteBuffer.allocate(128);
 
 ByteBuffer[] buffers = new ByteBuffer[]{buffer01, buffer02, buffer03};
 fileInputStream.getChannel().read(buffers);
-```java
+```
 <div align="center"> <img src="https://gitee.com/heibaiying/Full-Stack-Notes/raw/master/pictures/nio_gather.png"/> </div>
 
 ### 3.5 Pipe
@@ -370,13 +370,13 @@ Pipe 管道可以通过 Pipe 类的静态方法 `open()` 来创建：
 
 ```java
 Pipe pipe = Pipe.open();
-```java
+```
 创建完成后可以通过其 `sink()` 和 `source()` 方法来创建对应的 SinkChannel 和 SourceChannel：
 
 ```java
 Pipe.SinkChannel sinkChannel = pipe.sink();
 Pipe.SourceChannel sourceChannel = pipe.source();
-```java
+```
 SinkChannel 和 SourceChannel 的使用与基本的 Channel 类似，示例如下：
 
 ```java
@@ -413,7 +413,7 @@ new Thread(() -> {
         e.printStackTrace();
     }
 }).start();
-```java
+```
 ## 四、Selector
 
 ### 4.1 创建选择器
@@ -422,7 +422,7 @@ new Thread(() -> {
 
 ```java
 Selector selector = Selector.open();
-```java
+```
 ### 4.2 注册通道
 
 之后须要通过 `register()` 方法将 Channel 注册到 Selector 上，示例如下：
@@ -436,7 +436,7 @@ serverChannel.bind(new InetSocketAddress(hostname, port));
 
 // 注册监听CONNECT事件
 serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-```java
+```
 `register()` 方法的第二个参数表示需要监听的事件，它有以下四个可选值：
 
 ```java
@@ -448,17 +448,17 @@ public static final int OP_WRITE = 1 << 2;
 public static final int OP_CONNECT = 1 << 3;
 //接受连接事件
 public static final int OP_ACCEPT = 1 << 4;
-```java
+```
 如果你需要监听多个事件，可以使用位操作符进行连接：
 
 ```java
 int interestSet = SelectionKey.OP_READ | SelectionKey.OP_WRITE;
-```java
+```
 除此之外，你还可以在注册时通过调用 register 的另外一个重载方法来指定附加信息：
 
 ```java
 register(Selector sel, int ops, Object att)
-```java
+```
 这个附加信息可以在事件触发时通过 SelectionKey 对象再次得到。
 
 ### 4.3 select
@@ -467,7 +467,7 @@ register(Selector sel, int ops, Object att)
 
 ```java
 int select = selector.select();
-```java
+```
 select 有以下三个重载方法：
 
 - **select()**：持续阻塞，直到至少有一个通道在其注册的事件上处于就绪状态；
@@ -481,14 +481,14 @@ select 有以下三个重载方法：
 while (selector.select() >= 0) {
   ....
 }
-```java
+```
 ### 4.4 SelectionKey
 
 当注册的事件处于就绪状态时，可以通过 Selector 的 `selectedKeys()` 方法来获取处于就绪状态的事件信息：
 
 ```java
 Set<SelectionKey> selectionKeys = selector.selectedKeys();
-```java
+```
 其返回的是 SelectionKey 的集合，SelectionKey 是对多个属性的综合封装：
 
 ```java
@@ -534,7 +534,7 @@ public abstract class SelectionKey {
     public final Object attachment() { return attachment;}
 
 }
-```java
+```
 ## 五、聊天室实例
 
 下面以一个群聊的聊天室为例，来展示 Java NIO 三大组件的综合使用，效果如下：
@@ -682,7 +682,7 @@ public class ChatServer {
         new ChatServer(8888).start();
     }
 }
-```java
+```
 ### 5.2 客户端实现
 
 客户端的实现如下：
@@ -821,7 +821,7 @@ public class ChatClient {
         new ChatClient("127.0.0.1", 8888).start();
     }
 }
-```java
+```
 ## 参考资料
 
 - [Ron Hitchens . Java NIO . O'Reilly Media . 2002-08-15](https://book.douban.com/subject/1433583/)

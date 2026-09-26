@@ -89,7 +89,7 @@ public class TestCyclicBarrier {
 [11:07:05]pool-1-thread-5 所有线程到达栅栏处，继续执行各自线程任务...
 [11:07:05]pool-1-thread-3 所有线程到达栅栏处，继续执行各自线程任务...
 [11:07:05]pool-1-thread-4 所有线程到达栅栏处，继续执行各自线程任务...
-```java
+```
 # 源码分析
 
 ## 初始化
@@ -111,7 +111,7 @@ public CyclicBarrier(int parties, Runnable barrierAction) {
 public CyclicBarrier(int parties) {
     this(parties, null);
 }
-```java
+```
 可以看出屏障计数器不能为 0 。内部是依赖重入锁 ReentrantLock 和 Condition 实现的，这点和 CountDownLatch 不一样。
 
 ## await()方法
@@ -124,7 +124,7 @@ public int await() throws InterruptedException, BrokenBarrierException {
         throw new Error(toe); // cannot happen
     }
 }
-```java
+```
 `await()`方法主要依靠`dowait`方法时 u，会让线程会到达屏障点时一直处于等待中：
 
 ```java
@@ -200,7 +200,7 @@ private int dowait(boolean timed, long nanos)
         lock.unlock();
     }
 }
-```java
+```
 当线程调用 `await` 方法，首先会拿到 `ReentrantLock` 重入锁执行加锁操作，然后判断是否有线程执行了中断操作，如果有则抛出异常，没有就继续向下执行，把屏障计数器做递减操作，然后判断这个屏障计数器是否为 0 ，如果递减后的计数器等于 0，则表明所有线程都已到达屏障点。
 
 然后判断是否有传入指定的优先执行任务，如果有则先启动这个任务，然后唤醒所有等待的线程，重置屏障计数器 `count` 和 `Generation`。如果屏障值不为 0，则执行一个死循环，也就是自选操作。自选操作中，会先判断是否制定了超时等待时间，如果没有指定就执行 `Condition` 的 `await` 方法，让线程一直处于等待中，除非被唤醒或有其它线程执行了中断 CyclicBarrier 操作。如果制定了超时等待时间，则执行`Condition`的超时等待方法，让线程一直处于等待中，除非被唤醒或到达超时等待时间。

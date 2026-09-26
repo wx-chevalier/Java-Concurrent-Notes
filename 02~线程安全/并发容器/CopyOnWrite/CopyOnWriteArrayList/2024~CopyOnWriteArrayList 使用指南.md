@@ -42,7 +42,7 @@ public class CopyOnWriteArrayList<E> {
         return get(getArray(), index);
     }
 }
-```java
+```
 ## 三、适用场景详解
 
 ### 3.1 事件监听器管理
@@ -67,7 +67,7 @@ public class EventManager {
         }
     }
 }
-```java
+```
 ### 3.2 配置信息缓存
 
 适用于配置信息的读取频繁但修改较少的场景。
@@ -88,7 +88,7 @@ public class ConfigCache {
                 .orElse(null);
     }
 }
-```java
+```
 ### 3.3 白名单/黑名单管理
 
 适用于访问控制列表等场景。
@@ -105,7 +105,7 @@ public class AccessControlList {
         return whitelist.contains(item);
     }
 }
-```java
+```
 ## 四、不适用场景
 
 ### 4.1 高频写入场景
@@ -134,7 +134,7 @@ public class BetterMetricsCollector {
         }
     }
 }
-```java
+```
 ### 4.2 大数据量场景
 
 不适合存储大量数据：
@@ -163,7 +163,7 @@ public class BetterDataHandler {
         }
     }
 }
-```java
+```
 ## 五、性能优化建议
 
 ### 5.1 批量操作优化
@@ -182,7 +182,7 @@ public class BatchOperationExample {
         list.addAll(items);  // 只复制一次
     }
 }
-```java
+```
 ### 5.2 容量控制
 
 ```java
@@ -197,7 +197,7 @@ public class SizeControlExample {
         return list.add(item);
     }
 }
-```java
+```
 ## 六、最佳实践建议
 
 ### 6.1 使用场景检查清单

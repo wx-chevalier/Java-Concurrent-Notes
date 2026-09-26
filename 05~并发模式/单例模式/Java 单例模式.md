@@ -10,7 +10,7 @@ public class Singleton {
 　　　　return instance;
 　　}
 }
-```java
+```
 # 简单的同步延迟加载
 
 ```java
@@ -24,7 +24,7 @@ public class Singleton {
 　　　　return instance;
 　　}
 }
-```java
+```
 # 双重检查成例延迟加载
 
 ```java
@@ -44,7 +44,7 @@ public class Singleton {
 　　}
 
 }
-```java
+```
 # 静态内部类
 
 最方便且线程安全的懒加载单例构造方式是使用静态内部类。这种方法结合了延迟初始化和线程安全，同时保持了较高的性能和简洁的代码。以下是这种方法的实现：
@@ -61,7 +61,7 @@ public class Singleton {
         return SingletonHolder.INSTANCE;
     }
 }
-```java
+```
 这种实现方式的优点：
 
 1. 延迟加载：单例实例只在第一次调用 `getInstance()` 方法时才会被创建。
@@ -78,7 +78,7 @@ public class Singleton {
 
 ```java
 Singleton singleton = Singleton.getInstance();
-```java
+```
 这种方法的工作原理：
 
 - 当 `Singleton` 类被加载时，静态内部类 `SingletonHolder` 并不会被初始化。
@@ -100,7 +100,7 @@ public class Singleton {
 　　　　return Holder.instance;
 　　}
 }
-```java
+```
 # 枚举模式实现单例
 
 Java 中最完善的单例模式写法通常被认为是使用枚举实现的单例模式。这种方法不仅能确保线程安全，还能防止反射攻击和序列化问题。以下是一个完善的枚举单例模式的实现：
@@ -127,7 +127,7 @@ public enum EnumSingleton {
         // 资源类的实现
     }
 }
-```java
+```
 这种实现方式的优点：
 
 1. 线程安全：枚举的实例创建是线程安全的，由 JVM 保证。
@@ -148,7 +148,7 @@ public enum EnumSingleton {
 EnumSingleton singleton = EnumSingleton.INSTANCE;
 singleton.doSomething();
 Resource resource = singleton.getResource();
-```java
+```
 这种实现方式结合了枚举的优势和单例模式的需求，被认为是实现 Java 单例模式的最佳实践。它解决了传统单例实现中的线程安全问题、反射攻击问题和序列化问题，同时保持了代码的简洁性和可读性。
 
 虽然枚举实现的单例模式被广泛认为是 Java 中最完善的单例模式实现，但它也存在一些潜在的缺点或限制：

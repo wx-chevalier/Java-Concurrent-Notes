@@ -46,12 +46,12 @@ Executors 是一个帮助类，提供了创建几种预配置线程池实例的�
 
 ```java
 Executor executor = Executors.newSingleThreadExecutor();
-```java
+```
 获取了 Executor 示例后，我们就可以使用 execute() 方法将一个只在屏幕上打印 Hello World 的任务提交到队列中执行。
 
 ```java
 executor.execute(() -> System.out.println("Hello World"));
-```java
+```
 上面这个示例使用了 lambda（Java 8 特性）提交任务，JVM 会自动推断该任务为 Runnable
 
 # Links

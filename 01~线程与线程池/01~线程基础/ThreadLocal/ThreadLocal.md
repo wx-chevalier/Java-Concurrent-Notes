@@ -49,7 +49,7 @@ public abstract class PageMethod {
     return page;
   }
 }
-```java
+```
 然后使用分页参数代码：
 
 ```java
@@ -77,7 +77,7 @@ public abstract class AbstractHelperDialect extends AbstractDialect implements C
     }
     ...
 }
-```java
+```
 最后使用分页插件代码：
 
 ```java
@@ -88,7 +88,7 @@ public PageInfo<UserDO> queryUser(UserQuery userQuery, int pageNum, int pageSize
     PageInfo<UserDO> pageInfo = new PageInfo<>(userList);
     return pageInfo;
 }
-```java
+```
 ## 非线程安全对象存储
 
 在写日期格式化工具函数时，首先想到的写法如下：
@@ -101,7 +101,7 @@ private static final String DATE_PATTERN = "yyyy-MM-dd";
 public static String formatDate(Date date) {
     return new SimpleDateFormat(DATE_PATTERN).format(date);
 }
-```java
+```
 其中，每次调用都要初始化 DateFormat 导致性能较低，把 DateFormat 定义成常量后的写法如下：
 
 ```java
@@ -112,7 +112,7 @@ private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
 public static String formatDate(Date date) {
     return DATE_FORMAT.format(date);
 }
-```java
+```
 由于 SimpleDateFormat 是非线程安全的，当多线程同时调用 formatDate 函数时，会导致返回结果与预期不一致。如果采用 ThreadLocal 定义线程专有对象，优化后的代码如下：
 
 ```java
@@ -128,7 +128,7 @@ private static final ThreadLocal<DateFormat> LOCAL_DATE_FORMAT = new ThreadLocal
 public static String formatDate(Date date) {
     return LOCAL_DATE_FORMAT.get().format(date);
 }
-```java
+```
 不过 ThreadLocal 有一定的内存泄露的风险，尽量在业务代码结束前调用 remove 函数进行数据清除。
 
 # Links

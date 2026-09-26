@@ -49,7 +49,7 @@ class PrintMyActorRefActor extends AbstractActor {
       .build();
   }
 }
-```java
+```
 ```java
 // 精确匹配某个值
 .matchEquals
@@ -59,7 +59,7 @@ log.info("Received String message: {}", s);
 })
 // 匹配任意对象
 .matchAny(o -> log.info("received unknown message"))
-```java
+```
 然后在 Actor System 中注册该 Actor 的实例对象：
 
 ```java
@@ -77,7 +77,7 @@ system.terminate();
 
 // First: Actor[akka://testSystem/user/first-actor#1053618476]
 // Second: Actor[akka://testSystem/user/first-actor/second-actor#-1544706041]
-```java
+```
 Props is a configuration class to specify options for the creation of actors, think of it as an immutable and thus freely shareable recipe for creating an actor including associated deployment information.
 
 ```java
@@ -86,7 +86,7 @@ Props props1 = Props.create(MyActor.class);
 Props props2 = Props.create(ActorWithArgs.class,
   () -> new ActorWithArgs("arg"));
 Props props3 = Props.create(ActorWithArgs.class, "arg");
-```java
+```
 ## 消息传递
 
 ### 消息定义
@@ -108,7 +108,7 @@ public Receive createReceive() {
     })
     .build();
 }
-```java
+```
 ### Future 异步调用
 
 类似于 Java 中的 Future，可以将一个 actor 的返回结果重定向到另一个 actor 中进行处理，主 actor 或者进程无需等待 actor 的返回结果。
@@ -128,7 +128,7 @@ Future<Object> future1 = Patterns.ask(workerActor, 8, 1000);
 Patterns.pipe(future1, system.dispatcher()).to(printActor);
 
 workerActor.tell(PoisonPill.getInstance(), ActorRef.noSender());]
-```java
+```
 ## LifeCycle | 生命周期
 
 ![image](https://user-images.githubusercontent.com/5803001/47840701-1fcaab00-ddf2-11e8-93a9-a0cd34601dd0.png)
@@ -155,7 +155,7 @@ class StartStopActor1 extends AbstractActor {
         .build();
   }
 }
-```java
+```
 ## 各类型 Actor
 
 ### Typed Actor & AbstractActor
@@ -188,4 +188,4 @@ public static class Terminator extends AbstractLoggingActor {
 // 可以用来监控其他的 Actor
 ActorRef actorRef = system.actorOf(Props.create(HelloWorld.class), "helloWorld");
 system.actorOf(Props.create(Terminator.class, actorRef), "terminator");
-```java
+```

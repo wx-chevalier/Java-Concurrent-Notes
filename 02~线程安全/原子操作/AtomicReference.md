@@ -40,7 +40,7 @@ public class SimpleObject {
         this.age = age;
     }
 }
-```java
+```
 ## 使用 null 初始值创建新的 AtomicReference
 
 ```java
@@ -53,7 +53,7 @@ public class AtomicReferenceTest {
         System.out.println("simpleObject  Value: " + simpleObject.toString());
     }
 }
-```java
+```
 ## 使用给定的初始值创建新的 AtomicReference
 
 ```java
@@ -65,7 +65,7 @@ public class AtomicReferenceTest {
         System.out.println("simpleObject  Value: " + simpleObject1.toString());
     }
 }
-```java
+```
 ## 如果当前值 == 预期值，则以原子方式将该值设置为给定的更新值。
 
 ```java
@@ -78,7 +78,7 @@ public class AtomicReferenceTest {
         System.out.println("simpleObject  Value: " + bool);
     }
 }
-```java
+```
 ## 以原子方式设置为给定值，并返回旧值，先获取当前对象，在设置新的对象
 
 ```java
@@ -93,14 +93,14 @@ public class AtomicReferenceTest {
         System.out.println("simpleObject  Value: " + simpleObject3.toString());
     }
 }
-```java
+```
 # getAndUpdate
 
 AtomicReference 类的 getAndUpdate() 方法用于原子更新，该更新通过对当前值应用指定的 updateFunction 操作来更新 AtomicReference 的当前值。它以 updateFunction 接口的对象为参数，并将该对象中指定的操作应用于当前值。它返回先前的值。
 
 ```java
 public final V getAndUpdate(UnaryOperator<V> updateFunction)
-```java
+```
 此方法接受 updateFunction，它是没有副作用的函数。
 
 ```java
@@ -131,4 +131,4 @@ public class GFG {
             + ref.get()); // 98
     }
 }
-```java
+```

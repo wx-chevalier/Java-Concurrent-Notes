@@ -78,4 +78,4 @@ public class HSFServiceContainer {
       : ApplicationModelFactory.getCurrentApplication().getServiceContainer();
   }
 }
-```java
+```

@@ -12,7 +12,7 @@ Callable<Integer> task = () -> {
         throw new IllegalStateException("task interrupted", e);
     }
 };
-```java
+```
 Callbale 也可以像 Runnable 一样提交给 executor services。但是 submit()不会等待任务完成，executor service 不能直接返回 callable 的结果。不过，executor 可以返回一个 Future 类型的结果，它可以用来在稍后某个时间取出实际的结果。
 
 ```java
@@ -25,13 +25,13 @@ Integer result = future.get();
 
 System.out.println("future done? " + future.isDone());
 System.out.print("result: " + result);
-```java
+```
 Future 与底层的 ExecutorService 紧密的结合在一起。记住，如果你关闭 executor，所有的未中止的 future 都会抛出异常。
 
 ```java
 executor.shutdownNow();
 future.get();
-```java
+```
 任何 future.get()调用都会阻塞，然后等待直到 callable 中止。在最糟糕的情况下，一个 callable 持续运行——因此使你的程序将没有响应。我们可以简单的传入一个时长来避免这种情况。
 
 ```java
@@ -48,10 +48,10 @@ Future<Integer> future = executor.submit(() -> {
 });
 
 future.get(1, TimeUnit.SECONDS);
-```java
+```
 运行上面的代码将会产生一个 TimeoutException：
 
 ```java
 Exception in thread "main" java.util.concurrent.TimeoutException
     at java.util.concurrent.FutureTask.get(FutureTask.java:205)
-```java
+```

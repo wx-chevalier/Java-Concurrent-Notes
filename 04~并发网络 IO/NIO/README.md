@@ -44,7 +44,7 @@ selectionKey.isConnectable();  // 是否连接就绪
 selectionKey.isAcceptable();    // 是否接收就绪
 selectionKey.isReadable();      // 是否读就绪
 selectionKey.isWritable();        // 是否写就绪
-```java
+```
 # Java NIO 代码示例
 
 下面结合示例代码，进一步理解 Java NIO 中的各项概念。
@@ -91,4 +91,4 @@ while (true) {
 	keys.remove(key);
     }
 }
-```java
+```

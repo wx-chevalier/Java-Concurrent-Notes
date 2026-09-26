@@ -24,7 +24,7 @@ ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
 map.put("key1", 1);
 map.putIfAbsent("key2", 2);  // 仅当key不存在时才放入值
 map.computeIfAbsent("key3", k -> k.length());  // 计算并放入新值
-```java
+```
 ### 2. CopyOnWriteArrayList
 
 CopyOnWriteArrayList 是一个线程安全的 ArrayList 变体，特别适合读多写少的场景。
@@ -47,7 +47,7 @@ list.addIfAbsent("item2");
 for (String item : list) {
     System.out.println(item);
 }
-```java
+```
 ### 3. BlockingQueue 家族
 
 BlockingQueue 接口的实现类用于在线程间安全地传递数据，常用于生产者-消费者模式。
@@ -61,7 +61,7 @@ ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<>(100);
 queue.put("item");
 // 获取元素，如果队列空则等待
 String item = queue.take();
-```java
+```
 #### LinkedBlockingQueue
 
 ```java
@@ -71,7 +71,7 @@ LinkedBlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 taskQueue.offer(new Task(), 1, TimeUnit.SECONDS);
 // 获取任务
 Task task = taskQueue.poll(1, TimeUnit.SECONDS);
-```java
+```
 ### 4. ConcurrentSkipListMap
 
 ConcurrentSkipListMap 是线程安全的有序映射表，可以替代 TreeMap。
@@ -94,7 +94,7 @@ skipListMap.put("C", 3);
 for (Map.Entry<String, Integer> entry : skipListMap.entrySet()) {
     System.out.println(entry.getKey() + ": " + entry.getValue());
 }
-```java
+```
 ### 5. DelayQueue
 
 DelayQueue 是一个延迟队列，元素只有在其指定的延迟时间到期后才能被取出。
@@ -125,7 +125,7 @@ class DelayedElement implements Delayed {
 DelayQueue<DelayedElement> delayQueue = new DelayQueue<>();
 delayQueue.put(new DelayedElement(1000));  // 延迟1秒
 DelayedElement element = delayQueue.take();  // 阻塞直到元素可用
-```java
+```
 ## 使用建议
 
 ### 1. 选择原则

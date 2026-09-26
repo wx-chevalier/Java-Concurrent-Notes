@@ -60,7 +60,7 @@ public class SyncDeadLock{
         thread2.start();
     }
 }
-```java
+```
 # 异常发生时未正确释放锁
 
 ```java
@@ -136,7 +136,7 @@ public class LockDeadDemo {
         }
     }
 }
-```java
+```
 # Executor Saturation Deadlock | 线程饥饿死锁
 
 在线程池中任务如果依赖其他任务的执行，那么就可能出现死锁。对于单 worker 线程的 Executor，如果在一个已经被提交的任务中提交另一个任务到 Executor 中就会发生死锁。
@@ -174,5 +174,5 @@ class Task2 implements Callable<Boolean> {
     return true;
   }
 }
-```java
+```
 如果要避免 Saturation Deadlock 的方法就需要尽量提交独立的任务不相互依赖的任务。

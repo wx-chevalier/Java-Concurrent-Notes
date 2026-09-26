@@ -16,7 +16,7 @@ J.U.C. 即 java.util.concurrent 的缩写，该包参考自 EDU.oswego.cs.dl.uti
 public interface Executor {
     void execute(Runnable command);
 }
-```java
+```
 另外，我们还可以看到一个 Executors 类，它是一个工具类（有点类似集合框架的 Collections 类），用于创建 ExecutorService、ScheduledExecutorService、ThreadFactory 和 Callable 对象。任务的提交过程与执行过程解耦，用户只需定义好任务提交，具体如何执行，什么时候执行不需要关心；定义好任务（如 Callable 对象），把它提交给 ExecutorService（如线程池）去执行，得到 Future 对象，然后调用 Future 的 get 方法等待执行结果即可。
 
 任务就是实现 Callable 接口或 Runnable 接口的类，其实例就可以成为一个任务提交给 ExecutorService 去执行；其中 Callable 任务可以返回执行结果，Runnable 任务无返回结果；通过 Executors 工具类可以创建各种类型的线程池，如下为常见的四种：
@@ -33,7 +33,7 @@ ExecutorService executor = Executors.newCachedThreadPool();//创建线程池
 Task task = new Task(); //创建Callable任务
 Future<Integer> result = executor.submit(task);//提交任务给线程池执行
 result.get()；//等待执行结果; 可以传入等待时间参数，指定时间内没返回的话，直接结束
-```java
+```
 最后我们讨论下批量任务的执行方式：
 
 - 首先定义任务集合，然后定义 Future 集合用于存放执行结果，执行任务，最后遍历 Future 集合获取结果。优点：可以依次得到有序的结果；缺点：不能及时获取已完成任务的执行结果；
@@ -57,7 +57,7 @@ final void lock() {
       else
           acquire(1);
 }
-```java
+```
 首先是不管先后顺序，直接尝试获取锁（非公平的体现)，成功的话，直接独占访问；如果获取锁失败，则调用 AQS 的 acquire 方法，在该方法内部会调用 tryAcquire 方法再次尝试获取锁以及是否可重入判断，如果失败，则挂起当前线程并加入到等待队列；
 
 ## 可重入
@@ -131,7 +131,7 @@ J.U.C 中的同步器主要用于协助线程同步，有以下四种：
 public final boolean compareAndSet(int expect, int update) {
     return unsafe.compareAndSwapInt(this, valueOffset, expect, update);
 }
-```java
+```
 在 compareAndSwapInt 方法中，valueOffset 是内存地址，expect 是预期值，update 是更新值，如果 valueOffset 地址处的值与预期值相等，则将 valueOffset 地址处的值更新为 update 值。现代 CPU 已广泛支持 CAS 指令；在 Java 中，有四种原子更新方式，如下：
 
 - 原子方式更新基本类型：AtomicInteger、AtomicLong 等
@@ -169,7 +169,7 @@ public static Integer getLast(Vector<Integer> list){
     if(lastIndex < 0) return null;
     return list.get(lastIndex);
 }
-```java
+```
 在以上代码中，虽然 list 集合是 Vector 类型，但该方法仍然不是原子操作，因为在 list.size()和 list.get(lastIndex)之间，可能已经发生了很多事。
 
 ## ConcurrentHashMap
@@ -201,14 +201,14 @@ if (任务足够小){
   将任务拆分成多个子任务;
   执行这些子任务并等待结果;
 }
-```java
+```
 # TimeUnit 枚举
 
 TimeUnit 是 java.util.concurrent 包下面的一个枚举类，TimeUnit 提供了可读性更好的线程暂停操作。在 JDK5 之前，一般我们暂停线程是这样写的：
 
 ```java
 Thread.sleep（2400000）// 可读性差
-```java
+```
 在 JDK5 之后，我们可以这样写：
 
 ```java
@@ -216,9 +216,9 @@ TimeUnit.SECONDS.sleep(4);
 TimeUnit.MINUTES.sleep(4);
 TimeUnit.HOURS.sleep(1);
 TimeUnit.DAYS.sleep(1);
-```java
+```
 另外，TimeUnit 还提供了便捷方法用于把时间转换成不同单位，例如，如果你想把秒转换成毫秒，你可以使用下面代码
 
 ```java
 TimeUnit.SECONDS.toMillis(44);// 44,000
-```java
+```
