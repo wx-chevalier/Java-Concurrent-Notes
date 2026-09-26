@@ -144,22 +144,6 @@ public class ReadAndWriteLockTest {
         lock.readLock().unlock();
     }
 
-    public static void main(String[] args) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                get(Thread.currentThread());
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                get(Thread.currentThread());
-            }
-        }).start();
-    }
-
 }
 ```
 从 synchronized 运行结果可以看出，两个线程的读操作是顺序执行的，整个过程大概耗时 200ms。从 ReetrantReadWriteLock 运行结果可以看出，两个线程的读操作是同时执行的，整个过程大概耗时 100ms。通过两次实验的对比，我们可以看出来，ReetrantReadWriteLock 的效率明显高于 Synchronized 关键字。
@@ -269,53 +253,6 @@ public class ReadAndWriteLockTest {
             }
         });
     }
-
-    // 读操作
-    public static void readFile(Thread thread) {
-        lock.readLock().lock();
-        boolean readLock = lock.isWriteLocked();
-        if (!readLock) {
-            System.out.println("当前为读锁！");
-        }
-        try {
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(thread.getName() + ":正在进行读操作……");
-            }
-            System.out.println(thread.getName() + ":读操作完毕！");
-        } finally {
-            System.out.println("释放读锁！");
-            lock.readLock().unlock();
-        }
-    }
-
-    // 写操作
-    public static void writeFile(Thread thread) {
-        lock.writeLock().lock();
-        boolean writeLock = lock.isWriteLocked();
-        if (writeLock) {
-            System.out.println("当前为写锁！");
-        }
-        try {
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(thread.getName() + ":正在进行写操作……");
-            }
-            System.out.println(thread.getName() + ":写操作完毕！");
-        } finally {
-            System.out.println("释放写锁！");
-            lock.writeLock().unlock();
-        }
-    }
-}
 
 ```
 ReetrantReadWriteLock 读写锁的实现中，需要注意的，当有读锁时，写锁就不能获得；而当有写锁时，除了获得写锁的这个线程可以获得读锁外，其他线程不能获得读锁。

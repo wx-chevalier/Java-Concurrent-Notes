@@ -350,11 +350,6 @@ fileInputStream.getChannel().read(buffers);
 
 - **聚集 (gather)**：将多个 Buffer 中的数据依次写入到同一个 Channel 上。示例如下：
 
-```java
-ByteBuffer buffer01 = ByteBuffer.allocate(32);
-ByteBuffer buffer02 = ByteBuffer.allocate(64);
-ByteBuffer buffer03 = ByteBuffer.allocate(128);
-
 ByteBuffer[] buffers = new ByteBuffer[]{buffer01, buffer02, buffer03};
 fileInputStream.getChannel().read(buffers);
 ```
@@ -702,12 +697,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class ChatClient {
-
-    private String hostname;
-    private int port;
-    private Selector selector;
-    private final ByteBuffer rBuffer = ByteBuffer.allocate(1024);
-    private final ByteBuffer wBuffer = ByteBuffer.allocate(1024);
 
     ChatClient(String hostname, int port) {
         this.hostname = hostname;

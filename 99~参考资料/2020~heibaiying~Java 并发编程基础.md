@@ -397,14 +397,6 @@ public class J1_ThreadUnsafe {
         System.out.println(i);
     }
 
-    static class IncreaseTask implements Runnable {
-        @Override
-        public void run() {
-            for (int j = 0; j < 100000; j++) {
-                inc();
-            }
-        }
-
         private void inc() {
             i++;
         }
@@ -431,14 +423,6 @@ public class J2_SynchronizedSafe {
         //并打印返回值
         System.out.println(i);
     }
-
-    static class IncreaseTask implements Runnable {
-        @Override
-        public void run() {
-            for (int j = 0; j < 100000; j++) {
-                inc();
-            }
-        }
 
         private synchronized void inc() {
             i++;
