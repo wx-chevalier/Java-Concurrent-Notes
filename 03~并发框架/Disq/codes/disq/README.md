@@ -3,8 +3,8 @@
 Simple, fast, disk-backed queue and task executor for Java 8.
 
 **Features:**
-* `PersistentQueue<T>`: a disk-backed blocking queue;
-* `Disq<T>`: a disk-backed task executor.
+- `PersistentQueue<T>`: a disk-backed blocking queue;
+- `Disq<T>`: a disk-backed task executor.
 
 ## Usage
 
@@ -17,8 +17,7 @@ dependency to your `pom.xml` file:
     <artifactId>disq</artifactId>
     <version>0.12</version>
 </dependency>
-```
-
+```java
 Then, you can use it like that:
 
 ```java
@@ -34,4 +33,4 @@ Disq<String> disq = Disq.builder(processor)
 
 disq.submit("some item");
 disq.submit("another item");
-```
+```java

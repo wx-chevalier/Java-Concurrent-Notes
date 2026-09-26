@@ -14,14 +14,13 @@ Java SPI 的限定如下：
 package com.demo.api;
 
 /**
- * 数字操作接口
+ - 数字操作接口
  *
  */
 public interface INumOperate {
   public int operator(int a, int b);
 }
-```
-
+```java
 普通的 API 实现，加法操作，代码如下：
 
 ```java
@@ -30,7 +29,7 @@ package com.demo.api.impl;
 import com.demo.api.INumOperate;
 
 /**
- * 数字相加
+ - 数字相加
  *
  */
 public class NumPlusOperateImpl implements INumOperate {
@@ -42,8 +41,7 @@ public class NumPlusOperateImpl implements INumOperate {
     return r;
   }
 }
-```
-
+```java
 实现乘法的 SPI，在语法结构上和普通 api 实现一模一样，如下：
 
 ```java
@@ -52,7 +50,7 @@ package com.demo.spi.impl;
 import com.demo.api.INumOperate;
 
 /**
- * 数字相乘
+ - 数字相乘
  *
  */
 public class NumMutliOperateImpl implements INumOperate {
@@ -70,7 +68,7 @@ package com.demo.spi.impl;
 import com.demo.api.INumOperate;
 
 /**
- * 数字相减
+ - 数字相减
  *
  */
 public class NumSubtractOperateImpl implements INumOperate {
@@ -83,15 +81,13 @@ public class NumSubtractOperateImpl implements INumOperate {
     }
 
 }
-```
-
+```java
 在 META-INFO/services 目录下（如果没有改目录，手工新建即可），新建一个以 com.demo.api.INumOperate 命名的文件，文件内容指明两个 SPI 的实现类的全限定名称，如下：
 
 ```java
 com.demo.spi.impl.NumMutliOperateImpl
 com.demo.spi.impl.NumSubtractOperateImpl
-```
-
+```java
 main 函数如下，主程序中没有显示指明 SPI 的实现，而是通过 ServiceLoader 动态加载实现类：
 
 ```java
@@ -103,7 +99,7 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 /**
- * 主程序
+ - 主程序
  *
  */
 public class Main {
@@ -125,4 +121,4 @@ public class Main {
     }
   }
 }
-```
+```java

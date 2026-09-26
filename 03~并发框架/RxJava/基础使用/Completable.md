@@ -25,8 +25,7 @@ Completable flowableCompletable = Completable
   .fromPublisher(flowable);
 Completable singleCompletable = Single.just(1)
   .ignoreElement();
-```
-
+```java
 我们也可以使用 Completable.complete() 来立即结束当前的 Completable：
 
 ```java
@@ -43,8 +42,7 @@ Completable
         e.printStackTrace();
     }
 });
-```
-
+```java
 # 链式调用
 
 当我们只在乎操作的成功时，我们可以在许多实际用例中采用 Completables 链：
@@ -71,8 +69,7 @@ first
   .andThen(second)
   .test()
   .assertComplete();
-```
-
+```java
 我们可以根据需要链接多个 Completables。同时，如果至少一个源未能完成，则结果 Completable 也将不会触发 `onComplete()`：
 
 ```java
@@ -81,8 +78,7 @@ first
   .andThen(error)
   .test()
   .assertError(throwable);
-```
-
+```java
 此外，如果源之一是无限的或由于某种原因未达到 onComplete，则生成的 Completable 将永远不会触发 onComplete()或 onError()。
 
 ## 数组调用
@@ -106,4 +102,4 @@ Completable allElementsCompletable = Flowable
 allElementsCompletable
   .test()
   .assertComplete();
-```
+```java

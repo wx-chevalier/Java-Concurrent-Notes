@@ -10,8 +10,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           BlockingQueue<Runnable> workQueue,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
-```
-
+```java
 构造函数参数说明：
 
 - corePoolSize => 线程池核心线程数量
@@ -35,31 +34,31 @@ ThreadPoolExecutor 最常用的构造方法如下：
 
 ```java
  /**
-     * Creates a new {@code ThreadPoolExecutor} with the given initial
-     * parameters.
+     - Creates a new {@code ThreadPoolExecutor} with the given initial
+     - parameters.
      *
-     * @param corePoolSize the number of threads to keep in the pool, even
-     *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
-     * @param maximumPoolSize the maximum number of threads to allow in the
-     *        pool
-     * @param keepAliveTime when the number of threads is greater than
-     *        the core, this is the maximum time that excess idle threads
-     *        will wait for new tasks before terminating.
-     * @param unit the time unit for the {@code keepAliveTime} argument
-     * @param workQueue the queue to use for holding tasks before they are
-     *        executed.  This queue will hold only the {@code Runnable}
-     *        tasks submitted by the {@code execute} method.
-     * @param threadFactory the factory to use when the executor
-     *        creates a new thread
-     * @param handler the handler to use when execution is blocked
-     *        because the thread bounds and queue capacities are reached
-     * @throws IllegalArgumentException if one of the following holds:<br>
-     *         {@code corePoolSize < 0}<br>
-     *         {@code keepAliveTime < 0}<br>
-     *         {@code maximumPoolSize <= 0}<br>
-     *         {@code maximumPoolSize < corePoolSize}
-     * @throws NullPointerException if {@code workQueue}
-     *         or {@code threadFactory} or {@code handler} is null
+     - @param corePoolSize the number of threads to keep in the pool, even
+     -        if they are idle, unless {@code allowCoreThreadTimeOut} is set
+     - @param maximumPoolSize the maximum number of threads to allow in the
+     -        pool
+     - @param keepAliveTime when the number of threads is greater than
+     -        the core, this is the maximum time that excess idle threads
+     -        will wait for new tasks before terminating.
+     - @param unit the time unit for the {@code keepAliveTime} argument
+     - @param workQueue the queue to use for holding tasks before they are
+     -        executed.  This queue will hold only the {@code Runnable}
+     -        tasks submitted by the {@code execute} method.
+     - @param threadFactory the factory to use when the executor
+     -        creates a new thread
+     - @param handler the handler to use when execution is blocked
+     -        because the thread bounds and queue capacities are reached
+     - @throws IllegalArgumentException if one of the following holds:<br>
+     -         {@code corePoolSize < 0}<br>
+     -         {@code keepAliveTime < 0}<br>
+     -         {@code maximumPoolSize <= 0}<br>
+     -         {@code maximumPoolSize < corePoolSize}
+     - @throws NullPointerException if {@code workQueue}
+     -         or {@code threadFactory} or {@code handler} is null
      */
     public ThreadPoolExecutor(int corePoolSize,
                               int maximumPoolSize,
@@ -68,8 +67,7 @@ ThreadPoolExecutor 最常用的构造方法如下：
                               BlockingQueue<Runnable> workQueue,
                               ThreadFactory threadFactory,
                               RejectedExecutionHandler handler)
-```
-
+```java
 # 线程数目的控制
 
 其中 corePoolSize，maximumPoolSize 以及 KeepAliveTime 决定着线程池中线程的创建和消亡。
@@ -86,8 +84,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
                                       0L, TimeUnit.MILLISECONDS,
                                       new LinkedBlockingQueue<Runnable>());
     }
-```
-
+```java
 Executors 中的 newCachedThreadPool 方法
 
 ```java
@@ -96,8 +93,7 @@ public static ExecutorService newCachedThreadPool() {
                                     60L, TimeUnit.SECONDS,
                                     new SynchronousQueue<Runnable>());
  }
-```
-
+```java
 可以看到 newCachedThreadPool 生成的线程池最大线程数量没有限制，默认线程池数量为 0，keepAliveTime 为 60 秒，并且任务队列采用的是 SynchronousQ（这个后面会讲），这样的配置使得线程池具有很大的伸缩性，当长时间没有任务请求的时候线程池中线程数量会逐步减少保证不会有多余的空闲线程存在，当任务请求频率急速增加时，线程池会创建更多的工作线程来保证线程池的吞吐量，对于混合任务的执行这种线程池有很大的优势。
 
 # 任务队列
@@ -139,8 +135,7 @@ executorService.submit(()-> {
 executorService.submit(()-> {
     System.out.println("task 3");
 });
-```
-
+```java
 ## DiscardPolicy
 
 DiscardPolicy 会放弃执行新提交的任务而不会抛出异常。DiscardOldestPolicy 会放弃下一个要执行的任务然后重新提交新任务，需要注意的是如果任务队列使用的是 priorityBlockingQ 那么就会将执行优先级最高的任务放弃，所以使用这种策略需要谨慎。
@@ -155,8 +150,7 @@ public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
         r.run();
     }
 }
-```
-
+```java
 可以看出当任务队列充满之后并有什么方法可以阻塞新任务的提交，如果想实现这种策略可以使用 Semaphore。将 permits 设置为与任务队列大小一致，提交任务之前先到 Semaphore 中获取 permit，任务执行完毕之后释放 permit，当 permits 数量为 0 时，阻塞任务提交等待任务执行完毕释放 permit。
 
 ```java
@@ -187,8 +181,7 @@ public class BoundedExecutor {
     }
   }
 }
-```
-
+```java
 # ThreadPoolExecutor 扩展
 
 ## 生命周期
@@ -243,8 +236,7 @@ public class TimingThreadPool extends ThreadPoolExecutor {
     }
   }
 }
-```
-
+```java
 ## 线程工厂
 
 线程池中的工作线程都是通过线程工厂来创建的，同样的 ThreadPoolExecutor 支持自定义线程工厂来创建定制化的线程。如果你想定制线程的 UncaughtExecptionHandler 或者想在线程中加入一些日志打印功能或者想定制化线程的名字让你在 dump 文件中可以更直观的找到这个线程，那么就可以定制线程工厂来实现你的需求。线程工厂接口中只有一个方法：
@@ -253,6 +245,5 @@ public class TimingThreadPool extends ThreadPoolExecutor {
 public interface ThreadFactory {
   Thread newThread(Runnable r);
 }
-```
-
+```java
 可以通过实现这个接口来定制线程工厂。

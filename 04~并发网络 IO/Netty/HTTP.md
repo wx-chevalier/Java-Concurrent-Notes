@@ -14,8 +14,7 @@ public ChannelPipeline getPipeline() throws Exception {
     pipeline.addLast("handler", servletHandler); // will convert http request to servlet request
     return pipeline;
 }
-```
-
+```java
 Then you will need a NettyServletHandler that converts Netty HttpRequest to a Servlet request:
 
 ```java
@@ -26,8 +25,7 @@ public void messageReceived(ChannelHandlerContext context, MessageEvent event) t
     HttpRequest request = (HttpRequest) event.getMessage();
     // Then get URL, method, headers, ... and pass the values to the Servlet container.
 }
-```
-
+```java
 You will also need a method to start the server:
 
 ```java
@@ -45,4 +43,4 @@ public void startServer(int port, String pipelineFactory) throws Exception {
 
     server.bind(new InetSocketAddress(port));
 }
-```
+```java

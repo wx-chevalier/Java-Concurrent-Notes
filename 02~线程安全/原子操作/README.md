@@ -28,8 +28,7 @@ public class AtomicIntegerDemo {
         System.out.println("Final Count is : " + count.get());
     }
 }
-```
-
+```java
 # 原子更新数组
 
 - AtomicIntegerArray: 原子更新整型数组里的元素。
@@ -89,8 +88,7 @@ public class AtomicIntegerArrayDemo {
         }
     }
 }
-```
-
+```java
 # 原子更新引用类型
 
 - AtomicReference: 原子更新引用类型。
@@ -188,8 +186,7 @@ public class AtomicReferenceDemo {
         }
     }
 }
-```
-
+```java
 # 原子更新字段类
 
 - AtomicIntegerFieldUpdater: 原子更新整型的字段的更新器。
@@ -228,4 +225,4 @@ public class AtomicStampedReferenceDemo {
     }
 }
 
-```
+```java

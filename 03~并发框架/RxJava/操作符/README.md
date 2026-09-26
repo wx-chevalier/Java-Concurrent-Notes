@@ -140,5 +140,3 @@ Rx 最大的特征之一就是无法预测何时会有数据发射。有些 Obse
 # Links
 
 - https://mcxiaoke.gitbooks.io/rxdocs/content/Operators.html
-
-

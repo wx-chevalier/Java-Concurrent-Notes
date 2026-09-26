@@ -44,13 +44,13 @@ public class HSFServiceContainer {
   }
 
   /**
-   * 根据接口类型，返回所有的扩展实例
-   * 可以传入一组名称，如果该名称的类型是可选Optional，通过withDefault可以控制是否加载默认的实现
-   * @param classType   接口类型
-   * @param names       名称列表，如果传递空表示所有的类型
-   * @param withDefault 是否包含默认
-   * @param <T>         类型
-   * @return 实现列表, 如果不存在返回为空集合
+   - 根据接口类型，返回所有的扩展实例
+   - 可以传入一组名称，如果该名称的类型是可选Optional，通过withDefault可以控制是否加载默认的实现
+   - @param classType   接口类型
+   - @param names       名称列表，如果传递空表示所有的类型
+   - @param withDefault 是否包含默认
+   - @param <T>         类型
+   - @return 实现列表, 如果不存在返回为空集合
    */
   public static <T> List<T> getInstances(
     Class<T> classType,
@@ -67,9 +67,9 @@ public class HSFServiceContainer {
   }
 
   /**
-   * 根据接口类型获取合适的 AppServiceContainer
-   * 如果是@Shared，那么直接获取 SHARED_CONTAINER
-   * 否则，根据上下文获取当前的 AppServiceContainer
+   - 根据接口类型获取合适的 AppServiceContainer
+   - 如果是@Shared，那么直接获取 SHARED_CONTAINER
+   - 否则，根据上下文获取当前的 AppServiceContainer
    */
   private static <T> AppServiceContainer getAppServiceContainer(
     Class<T> classType
@@ -78,4 +78,4 @@ public class HSFServiceContainer {
       : ApplicationModelFactory.getCurrentApplication().getServiceContainer();
   }
 }
-```
+```java

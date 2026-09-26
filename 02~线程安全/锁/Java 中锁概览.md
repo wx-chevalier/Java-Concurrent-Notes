@@ -36,8 +36,7 @@ synchronized void setA() throws Exception {
 synchronized void setB() throws Exception{
     Thread.sleep(1000)
 }
-```
-
+```java
 上面的代码就是一个可重入锁的一个特点，如果不是可重入锁的话，setB 可能不会被当前线程执行，可能造成死锁。
 
 ## 不可重入锁

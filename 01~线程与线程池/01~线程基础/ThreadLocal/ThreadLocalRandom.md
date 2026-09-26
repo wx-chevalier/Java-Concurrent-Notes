@@ -2,4 +2,4 @@
 
 # Links
 
-- https://cubox.pro/c/BHwSJw 一文读懂ThreadLocalRandom      
+- https://cubox.pro/c/BHwSJw 一文读懂ThreadLocalRandom

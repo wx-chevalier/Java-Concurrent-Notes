@@ -12,8 +12,7 @@ Futures.addCallback(listenable, new FutureCallback<Object>() {
     @Override
     public void onFailure(Throwable throwable) {}
 })
-```
-
+```java
 ListenableFuture 适用场景：
 
 - 如果一个主任务开始执行，然后需要执行各个小任务，并且需要等待返回结果，统一返回给前端，此时 Future 和 ListenableFuture 作用几乎差不多，都是通过 get()方法阻塞等待每个任务执行完毕返回。

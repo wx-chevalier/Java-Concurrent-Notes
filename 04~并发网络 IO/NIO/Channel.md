@@ -40,8 +40,7 @@ while (buffer.remaining()>0) {
 }
 
 fin.close();
-```
-
+```java
 我们也可以使用 RandomAccessFile 来随机读取文件内容：
 
 ```java
@@ -59,8 +58,7 @@ while (bytesRead != -1) {
   bytesRead = inChannel.read(buf);
 }
 aFile.close();
-```
-
+```java
 # 数据写入
 
 使用 NIO 写入数据与读取数据的过程类似，同样数据不是直接写入通道，而是写入缓冲区，可以分为下面三个步骤：
@@ -86,4 +84,4 @@ static public void main( String args[] ) throws Exception {
 
     fout.close();
 }
-```
+```java

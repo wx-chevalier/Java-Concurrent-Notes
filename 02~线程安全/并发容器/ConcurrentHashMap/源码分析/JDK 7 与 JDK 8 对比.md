@@ -54,8 +54,7 @@ final V put(K key, int hash, V value, boolean onlyIfAbsent) {
     }
     return oldValue;
 }
-```
-
+```java
 具体的插入过程就不提了，注意区分插入的桶位置存在与不存在 HashEntry（即是否发生了哈希冲突）的两种情况，以及头插法、扩容操作就行，下面看看与锁相关的部分。线程进入 put()方法时，会首先调用 ReentrantLock.tryLock()方法试图获取锁。如果未能获取到锁（被其他线程持有中），就调用 scanAndLockForPut()方法，其源码如下。
 
 ```java
@@ -89,8 +88,7 @@ private HashEntry<K,V> scanAndLockForPut(K key, int hash, V value) {
     }
     return node;
 }
-```
-
+```java
 可见是自旋执行 tryLock()方法获取锁，最多会重试 MAX_SCAN_RETRIES（多核环境下为 64）次。如果重试达到上限还未成功，就直接调用 lock()方法阻塞，等待锁被其他线程释放。注意在重试的最后会检测对应的 HashEntry 是否发生了变化，如果变化了，会重新开始自旋。
 
 本线程插入完毕之后，调用 ReentrantLock.unlock()方法释放锁，同时唤醒 AQS 队列中阻塞着的下一个线程（如果有的话）进行插入操作，执行完毕。
@@ -169,8 +167,7 @@ JDK 8 版 CHM 使用与 HashMap 相同的数据结构，即哈希桶数组（Nod
      addCount(1L, binCount);
      return null;
  }
-```
-
+```java
 该方法的步骤简述如下：
 
 1. 计算 key 的哈希码；

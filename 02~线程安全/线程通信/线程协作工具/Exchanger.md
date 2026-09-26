@@ -41,17 +41,15 @@ public class ExchangeTest {
         });
     }
 }
-```
-
+```java
 最后结果为：
 
-```
+```java
 线程pool-1-thread-1正在把数据 零食 换出去
 线程pool-1-thread-2正在把数据 钱 交换出去
 线程 pool-1-thread-1换回的数据为 钱
 线程 pool-1-thread-2交换回来的数据是: 零食
-```
-
+```java
 # Asynchronous（异步）
 
 ## Timeouts
@@ -72,11 +70,10 @@ Future<Integer> future = executor.submit(() -> {
 });
 
 future.get(1, TimeUnit.SECONDS);
-```
-
+```java
 运行上面的代码将会产生一个 TimeoutException:
 
 ```java
 Exception in thread "main" java.util.concurrent.TimeoutException
     at java.util.concurrent.FutureTask.get(FutureTask.java:205)
-```
+```java

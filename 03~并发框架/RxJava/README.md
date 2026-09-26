@@ -22,8 +22,7 @@ Observable.from(1, 2, 3, 4, 5)
 .subscribe((value) -> {
     System.out.println(value);
 });
-```
-
+```java
 # 背景分析
 
 RxJava 与 Java 本身提供的异步模型以及其他响应式编程框架相比而言有以下特点：
@@ -77,4 +76,4 @@ Observable.from(folders)
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
     .subscribe((Action1) (bitmap) -> { imageCollectorView.addImage(bitmap) });
-```
+```java
